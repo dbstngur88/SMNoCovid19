@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "467681625360",
+    "firebase_url": "https://smnocovid19.firebaseio.com",
+    "project_id": "smnocovid19",
+    "storage_bucket": "smnocovid19.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:467681625360:android:d4eb43f51cae2478dd1195",
+        "android_client_info": {
+          "package_name": "com.example.smnocovid19"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "467681625360-gjslf89i5mmipm2qbb985m8lgvt2idj1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_Gi63fcSIIKZRgEv_uGN_cprWAzS9Ueo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "467681625360-gjslf89i5mmipm2qbb985m8lgvt2idj1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
