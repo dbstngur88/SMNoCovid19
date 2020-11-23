@@ -16,7 +16,6 @@
         <activity android:name=".FindInfoActivity"></activity>
         <activity android:name=".RegisterActivity" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".QrCodeActivity" />
         <activity android:name=".TimeLineActivity" />
         <activity android:name=".UserCreateActivity" />
         <activity android:name=".LoginActivity" />
