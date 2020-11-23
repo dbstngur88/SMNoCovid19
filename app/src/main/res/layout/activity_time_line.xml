@@ -7,15 +7,9 @@
     android:orientation="vertical"
     tools:context=".TimeLineActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/timeLineList">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_View"
-            tools:listitem="@layout/timelinerow"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
-    </LinearLayout>
+   <ListView
+       android:id="@+id/timeLineListView"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:padding="16dp"/>
 </LinearLayout>
