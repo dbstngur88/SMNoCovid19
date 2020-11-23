@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
-    Button button1, button2;
+    Button button1, button2, button3;
     Intent intent;
 
     @Override
@@ -18,7 +18,8 @@ public class MainActivity extends AppCompatActivity {
         
         button1 = findViewById(R.id.button1);
         button2 = findViewById(R.id.button2);
-        
+        button3 = findViewById(R.id.button3);
+
         intent = new Intent();
         
         //장동민 개발 내역 연결 버튼
@@ -35,6 +36,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 intent = new Intent(MainActivity.this, TimeLineActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        //윤수혁 개발 내역 연결 버튼
+        button3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
         });

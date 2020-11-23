@@ -13,10 +13,14 @@
             android:screenOrientation="fullSensor"
             xmlns:tools="http://schemas.android.com/tools"
             tools:replace="screenOrientation" />
+        <activity android:name=".FindInfoActivity"></activity>
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".MainActivity" />
+        <activity android:name=".QrCodeActivity" />
         <activity android:name=".TimeLineActivity" />
         <activity android:name=".UserCreateActivity" />
         <activity android:name=".LoginActivity" />
-        <activity android:name="MainActivity">
+        <activity android:name=".IntroActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

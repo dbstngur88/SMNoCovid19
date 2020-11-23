@@ -20,4 +20,10 @@
         android:layout_height="wrap_content"
         android:text="박민석 개발 내역" />
 
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="윤수혁 개발 내역" />
+
 </LinearLayout>
