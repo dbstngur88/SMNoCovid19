@@ -29,14 +29,18 @@ import java.util.Map;
 public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth fAuth;
     FirebaseFirestore fStore;
-    EditText txtEmail,txtPW, txtPWCheck, txtNickname;
+    EditText txtEmail,txtPW, txtPWCheck, txtName,txtStudentnumber, txtMajor,  txtSex, txtPhoneNum;
     Button btnPWCheck, btnRegister;
     Boolean boolPW;
 
     String userEmail;
     String userPW;
-    String userNickname;
+    String userName;
     String userPWCheck;
+    String userStudentNumber;
+    String userMajor;
+    String userSex;
+    String userPhoneNum;
 
     private static final String TAG = "RegisterActivity";
 
@@ -57,13 +61,17 @@ public class RegisterActivity extends AppCompatActivity {
         txtEmail = findViewById(R.id.email);
         txtPW = findViewById(R.id.password);
         txtPWCheck = findViewById(R.id.checkPW);
-        txtNickname = findViewById(R.id.nickname);
+        txtName = findViewById(R.id.name);
+        txtStudentnumber = findViewById(R.id.studentnumber);
+        txtMajor = findViewById(R.id.major);
+        txtSex = findViewById(R.id.sex);
+        txtPhoneNum = findViewById(R.id.phonenum);
 
         btnPWCheck = findViewById(R.id.btnPWCheck);
         btnRegister = findViewById(R.id.btnRegister);
 
         boolPW = false;
-        txtNickname.setOnKeyListener(new View.OnKeyListener() {
+        txtPhoneNum.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_DOWN) {
                     switch (keyCode) {
@@ -72,7 +80,11 @@ public class RegisterActivity extends AppCompatActivity {
                             userEmail = txtEmail.getText().toString();
                             userPW = txtPW.getText().toString();
                             userPWCheck = txtPWCheck.getText().toString();
-                            userNickname = txtNickname.getText().toString();
+                            userName = txtName.getText().toString();
+                            userStudentNumber = txtStudentnumber.getText().toString();
+                            userMajor = txtMajor.getText().toString();
+                            userSex = txtSex.getText().toString();
+                            userPhoneNum = txtPhoneNum.getText().toString();
                             if (TextUtils.isEmpty(userEmail)) {
                                 Toast.makeText(RegisterActivity.this, "이메일을 입력해주세요.", Toast.LENGTH_SHORT).show();
                             }else if (TextUtils.isEmpty(userPW)) {
@@ -83,10 +95,18 @@ public class RegisterActivity extends AppCompatActivity {
                                 Toast.makeText(RegisterActivity.this, "비밀번호 확인란을 입력해주세요.", Toast.LENGTH_SHORT).show();
                             }else if (boolPW == false){
                                 Toast.makeText(RegisterActivity.this,"비밀번호 중복확인을 해주세요.", Toast.LENGTH_SHORT).show();
-                            }else if (TextUtils.isEmpty(userNickname)) {
-                                Toast.makeText(RegisterActivity.this, "별명을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                            }else if (TextUtils.isEmpty(userName)) {
+                                Toast.makeText(RegisterActivity.this, "이름을 입력해주세요.", Toast.LENGTH_SHORT).show();
                             }else if (userEmail.indexOf('@') < 0) {
                                 Toast.makeText(RegisterActivity.this, "이메일 형식이 올바르지 않습니다. 다시 확인해주세요.", Toast.LENGTH_SHORT).show();
+                            }else if (TextUtils.isEmpty(userStudentNumber)) {
+                                Toast.makeText(RegisterActivity.this, "학번을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                            }else if (TextUtils.isEmpty(userMajor)) {
+                                Toast.makeText(RegisterActivity.this, "학과를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                            }else if (TextUtils.isEmpty(userSex)) {
+                                Toast.makeText(RegisterActivity.this, "성별을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                            }else if (TextUtils.isEmpty(userPhoneNum)) {
+                                Toast.makeText(RegisterActivity.this, "휴대폰 번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
                             }else if (boolPW == true){
                                 registerUser();
                             }else {
@@ -134,29 +154,38 @@ public class RegisterActivity extends AppCompatActivity {
                 userEmail = txtEmail.getText().toString();
                 userPW = txtPW.getText().toString();
                 userPWCheck = txtPWCheck.getText().toString();
-                userNickname = txtNickname.getText().toString();
+                userName = txtName.getText().toString();
+                userStudentNumber = txtStudentnumber.getText().toString();
+                userMajor = txtMajor.getText().toString();
+                userSex = txtSex.getText().toString();
+                userPhoneNum = txtPhoneNum.getText().toString();
                 if (TextUtils.isEmpty(userEmail)) {
                     Toast.makeText(RegisterActivity.this, "이메일을 입력해주세요.", Toast.LENGTH_SHORT).show();
-                    return;
                 }else if (TextUtils.isEmpty(userPW)) {
                     Toast.makeText(RegisterActivity.this, "비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
-                    return;
                 }else if (userPW.length() < 8) {
                     Toast.makeText(RegisterActivity.this, "비밀번호는 8자리 이상입니다. 다시 입력해주세요.", Toast.LENGTH_SHORT).show();
                 }else if (TextUtils.isEmpty(userPWCheck)) {
                     Toast.makeText(RegisterActivity.this, "비밀번호 확인란을 입력해주세요.", Toast.LENGTH_SHORT).show();
-                    return;
                 }else if (boolPW == false){
                     Toast.makeText(RegisterActivity.this,"비밀번호 중복확인을 해주세요.", Toast.LENGTH_SHORT).show();
-                }else if (TextUtils.isEmpty(userNickname)) {
-                    Toast.makeText(RegisterActivity.this, "별명을 입력해주세요.", Toast.LENGTH_SHORT).show();
-                    return;
+                }else if (TextUtils.isEmpty(userName)) {
+                    Toast.makeText(RegisterActivity.this, "이름을 입력해주세요.", Toast.LENGTH_SHORT).show();
                 }else if (userEmail.indexOf('@') < 0) {
                     Toast.makeText(RegisterActivity.this, "이메일 형식이 올바르지 않습니다. 다시 확인해주세요.", Toast.LENGTH_SHORT).show();
+                }else if (TextUtils.isEmpty(userStudentNumber)) {
+                    Toast.makeText(RegisterActivity.this, "학번을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                }else if (TextUtils.isEmpty(userMajor)) {
+                    Toast.makeText(RegisterActivity.this, "학과를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                }else if (TextUtils.isEmpty(userSex)) {
+                    Toast.makeText(RegisterActivity.this, "성별을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                }else if (TextUtils.isEmpty(userPhoneNum)) {
+                    Toast.makeText(RegisterActivity.this, "휴대폰 번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
                 }else if (boolPW == true){
                     registerUser();
-                }else
-                    Toast.makeText(RegisterActivity.this,"알수 없는 오류", Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(RegisterActivity.this, "알수 없는 오류", Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
     }
@@ -172,12 +201,20 @@ public class RegisterActivity extends AppCompatActivity {
                             FirebaseUser user = fAuth.getCurrentUser();
                             userEmail = fAuth.getCurrentUser().getEmail();
                             userPW = txtPW.getText().toString();
-                            userNickname = txtNickname.getText().toString();
+                            userName = txtName.getText().toString();
+                            userStudentNumber = txtStudentnumber.getText().toString();
+                            userMajor = txtMajor.getText().toString();
+                            userSex = txtSex.getText().toString();
+                            userPhoneNum = txtPhoneNum.getText().toString();
                             DocumentReference documentReference = fStore.collection("users").document(userEmail);
                             Map<String, Object> userMap = new HashMap<>();
                             userMap.put("email", userEmail);
                             userMap.put("password", userPW);
-                            userMap.put("nickname", userNickname);
+                            userMap.put("name", userName);
+                            userMap.put("studentnumber", userStudentNumber);
+                            userMap.put("major", userMajor);
+                            userMap.put("sex", userSex);
+                            userMap.put("phonenum",userPhoneNum);
                             documentReference.set(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
