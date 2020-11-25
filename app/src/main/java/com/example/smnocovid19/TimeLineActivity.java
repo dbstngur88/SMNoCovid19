@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
 public class TimeLineActivity extends AppCompatActivity {
-    List<TimeLine> timeLineList = new ArrayList<>();
+    List<User> timeLineList = new ArrayList<>();
     RecyclerView mRecyclerView;
     Context context;
 
@@ -57,12 +57,12 @@ public class TimeLineActivity extends AppCompatActivity {
         timeLineDbRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                TimeLine timeLine = snapshot.getValue(TimeLine.class);
+                User timeLine = snapshot.getValue(User.class);
                 timeLineList.clear(); //기존 배열리스트가 존재하지 않게 초기화
                 //realtimeDB의 실시간 시간 설정
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String strDate = simpleDateFormat.format(new Date());
-                timeLine.setUpdateDate(strDate);
+                timeLine.setUpdateTime(strDate);
                 timeLineDbRef.setValue(timeLine);
                 //담은 데이터들을 배열리스트에 넣음
                 timeLineList.add(timeLine);

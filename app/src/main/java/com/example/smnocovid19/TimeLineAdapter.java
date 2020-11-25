@@ -20,9 +20,9 @@ import java.util.List;
 public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineViewHolder> {
     TimeLineActivity timeLineActivity;
     Context mContext;
-    List<TimeLine> timeLineList;
+    List<User> timeLineList;
 
-    public TimeLineAdapter(TimeLineActivity timeLineActivity,List<TimeLine> timeLineList, Context mContext ) {
+    public TimeLineAdapter(TimeLineActivity timeLineActivity,List<User> timeLineList, Context mContext ) {
         this.timeLineActivity = timeLineActivity;
         this.mContext = mContext;
         this.timeLineList = timeLineList;
@@ -42,7 +42,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineViewHolder> {
                 //아이템을 클릭할 때 동작
                 String buildingName = timeLineList.get(position).getBuildingName();
                 String buildingFloor = timeLineList.get(position).getBuildingFloor();
-                String dateTime = timeLineList.get(position).getUpdateDate();
+                String dateTime = timeLineList.get(position).getUpdateTime();
                 Toast.makeText(timeLineActivity, buildingName+" "+ buildingFloor
                         +"\n" + dateTime, Toast.LENGTH_SHORT).show();
             }
@@ -54,7 +54,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineViewHolder> {
     public void onBindViewHolder(@NonNull TimeLineViewHolder holder, int position) {
         holder.txtBuilding.setText(timeLineList.get(position).getBuildingName());
         holder.txtFloor.setText(timeLineList.get(position).getBuildingFloor());
-        holder.txtTime.setText(timeLineList.get(position).getUpdateDate());
+        holder.txtTime.setText(timeLineList.get(position).getUpdateTime());
     }
 
     @Override
