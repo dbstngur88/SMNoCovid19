@@ -17,7 +17,6 @@
         <activity android:name=".RegisterActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".TimeLineActivity" />
-        <activity android:name=".UserCreateActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".IntroActivity">
             <intent-filter>

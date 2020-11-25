@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:padding="16dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
     <ImageView
         android:id="@+id/image"
-        android:src="@color/colorAccent"
+        android:src="@drawable/timeline_clock_outline_icon_139135"
         android:layout_width="80dp"
         android:layout_height="80dp"/>
 
@@ -31,12 +35,12 @@
         android:textSize="20dp"
         android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/txtTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:text="시간"
-        android:textSize="20dp" />
-
-</LinearLayout>
+        <TextView
+            android:id="@+id/txtTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:text="시간"
+            android:textSize="20dp" />
+    </LinearLayout>
+    </androidx.cardview.widget.CardView>
