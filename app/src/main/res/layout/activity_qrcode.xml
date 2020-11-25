@@ -16,7 +16,6 @@
         android:layout_centerVertical="true"
         android:orientation="vertical">
 
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -48,19 +47,6 @@
 
         <EditText
             android:id="@+id/textViewBuildingFloor"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="입장시간" />
-
-        <EditText
-            android:id="@+id/textViewUpdateTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text=""

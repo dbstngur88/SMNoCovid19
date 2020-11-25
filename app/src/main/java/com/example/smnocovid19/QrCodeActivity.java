@@ -72,9 +72,9 @@ public class QrCodeActivity extends AppCompatActivity {
         });
 
        // textViewUserNumber = (TextView) findViewById(R.id.textViewUserNumber);
-        textViewBuildingFloor = (TextView) findViewById(R.id.textViewBuildingFloor);
         textViewBuildingName = (TextView) findViewById(R.id.textViewBuildingName);
-        textViewUpdateTime = findViewById(R.id.textViewUpdateTime);
+        textViewBuildingFloor = (TextView) findViewById(R.id.textViewBuildingFloor);
+//        textViewUpdateTime = findViewById(R.id.textViewUpdateTime);
 
         qrScan = new IntentIntegrator(this);
         qrScan.setOrientationLocked(false);
@@ -87,18 +87,18 @@ public class QrCodeActivity extends AppCompatActivity {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
             if (result.getContents() == null) {
-                Toast.makeText(this, "취소하였습니다", Toast.LENGTH_SHORT).show();
+                Toast.makeText(QrCodeActivity.this, "취소하였습니다", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "인식되었습니다 " + result.getContents(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(QrCodeActivity.this, "인식되었습니다 " + result.getContents(), Toast.LENGTH_SHORT).show();
                 try {
                     JSONObject obj = new JSONObject(result.getContents());
-                    //textViewUserNumber.setText(obj.getString(""));
-                    textViewBuildingFloor.setText(obj.getString("buildingFloor"));
+                   // textViewUserNumber.setText(obj.getString(""));
                     textViewBuildingName.setText(obj.getString("buildingName"));
-                    textViewUpdateTime.setText(obj.getString("updateDate"));
+                    textViewBuildingFloor.setText(obj.getString("buildingFloor"));
+//                    textViewUpdateTime.setText(obj.getString("updateDate"));
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    // textViewUserNumber.setText(result.getContents());
+                    textViewBuildingName.setText(result.getContents());
                 }
             }
         } else {
