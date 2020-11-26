@@ -8,17 +8,20 @@
     android:paddingTop="50dp"
     android:paddingRight="50dp"
     android:paddingBottom="10dp"
+    android:background="#4F71E9F4"
     tools:context="MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+
         android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@android:color/darker_gray"
             android:text="학번" />
 
         <EditText
@@ -31,6 +34,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@android:color/darker_gray"
             android:text="건물" />
 
         <EditText
@@ -43,6 +47,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@android:color/darker_gray"
             android:text="층" />
 
         <EditText
@@ -56,24 +61,40 @@
 
     <Button
         android:id="@+id/check"
-        android:layout_width="wrap_content"
+        android:layout_width="136dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="569dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="550dp"
         android:layout_marginBottom="163dp"
-        android:text="확인" />
+        android:background="@drawable/round_value"
+        android:text="확인"
+        android:textColor="@android:color/holo_blue_dark"
+        android:textSize="24sp" />
 
     <Button
         android:id="@+id/button4"
-        android:layout_width="wrap_content"
+        android:layout_width="136dp"
         android:layout_height="wrap_content"
         android:layout_alignRight="@id/check"
         android:layout_alignBottom="@id/check"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="14dp"
-        android:layout_marginBottom="-7dp"
-        android:text="취소" />
+        android:layout_marginRight="0dp"
+        android:layout_marginBottom="0dp"
+        android:background="@drawable/round_value"
+        android:text="취소"
+        android:textColor="@android:color/holo_blue_dark"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@android:color/holo_blue_dark"
+        android:textSize="48sp"
+        android:text="인증확인" />
 
 
 </RelativeLayout>
