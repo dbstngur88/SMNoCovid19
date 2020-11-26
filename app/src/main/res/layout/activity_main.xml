@@ -26,4 +26,10 @@
         android:layout_height="wrap_content"
         android:text="윤수혁 개발 내역" />
 
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="파이어베이스 로그아웃" />
+
 </LinearLayout>

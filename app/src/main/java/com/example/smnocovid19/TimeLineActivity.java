@@ -53,7 +53,7 @@ public class TimeLineActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
 
-        timeLineDbRef = FirebaseDatabase.getInstance().getReference("timeline");
+        timeLineDbRef = FirebaseDatabase.getInstance().getReference("timeline/1");
         timeLineDbRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

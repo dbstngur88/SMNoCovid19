@@ -141,6 +141,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
     //로그아웃 안했으면, 즉 로그인 되어있으면 자동으로 메인페이지로 이동시키기
+
     @Override
     public void onStart() {
         super.onStart();
@@ -154,4 +155,6 @@ public class LoginActivity extends AppCompatActivity {
             finish();
         }
     }
+
+
 }
