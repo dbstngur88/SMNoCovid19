@@ -63,6 +63,11 @@ public class QrCodeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrcode);
 
+        textViewUserNumber = (TextView) findViewById(R.id.textViewUserNumber);
+        textViewBuildingName = (TextView) findViewById(R.id.textViewBuildingName);
+        textViewBuildingFloor = (TextView) findViewById(R.id.textViewBuildingFloor);
+//        textViewUpdateTime = findViewById(R.id.textViewUpdateTime);
+
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
         currentUser = fAuth.getCurrentUser();
@@ -72,7 +77,7 @@ public class QrCodeActivity extends AppCompatActivity {
         btn_cancel = findViewById(R.id.cancel);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         readUser();
-        setUserInfo();
+        getUserInfo();
 
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,15 +108,12 @@ public class QrCodeActivity extends AppCompatActivity {
             }
         });
 
-        textViewUserNumber = (TextView) findViewById(R.id.textViewUserNumber);
-        textViewBuildingName = (TextView) findViewById(R.id.textViewBuildingName);
-        textViewBuildingFloor = (TextView) findViewById(R.id.textViewBuildingFloor);
-//        textViewUpdateTime = findViewById(R.id.textViewUpdateTime);
-
         qrScan = new IntentIntegrator(this);
         qrScan.setOrientationLocked(false);
         qrScan.setPrompt("사각형에 QR코드를 맞춰주세요");
         qrScan.initiateScan();
+
+
     }
 
     @Override
@@ -124,7 +126,6 @@ public class QrCodeActivity extends AppCompatActivity {
                 Toast.makeText(QrCodeActivity.this, "인식되었습니다 " , Toast.LENGTH_SHORT).show();
 
 //                findUserNum();
-                textViewUserNumber.setText(subUserNumber);
                 try {
                     JSONObject obj = new JSONObject(result.getContents());
 
@@ -182,9 +183,9 @@ public class QrCodeActivity extends AppCompatActivity {
 //
 //    }
 
-    public void setUserInfo() {
+    public void getUserInfo() {
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
-        fStore.collection("users")
+        db.collection("users")
                 .whereEqualTo("email", userEmail)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -192,27 +193,11 @@ public class QrCodeActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                fStoreEmail = (String) document.get("email");
                                 fStoreStudentNumber = (String) document.get("studentnumber");
+                                textViewUserNumber.setText(fStoreStudentNumber);
                             }
                         } else {
                             Toast.makeText(QrCodeActivity.this, "에러 발생", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-
-        db.collection("users")
-                .whereEqualTo("studentnumber", fStoreStudentNumber)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for(QueryDocumentSnapshot document : task.getResult()) {
-                                subUserNumber = (String) document.get("studentnumber");
-                            }
-                        } else {
-                            Toast.makeText(QrCodeActivity.this, "학번이 없습니다", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
