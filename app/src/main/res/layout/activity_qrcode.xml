@@ -1,100 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#4F71E9F4"
+    android:gravity="center"
+    android:orientation="vertical"
     android:paddingLeft="10dp"
     android:paddingTop="50dp"
     android:paddingRight="50dp"
     android:paddingBottom="10dp"
-    android:background="#4F71E9F4"
     tools:context="MainActivity">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/darker_gray"
-            android:text="학번" />
-
-        <EditText
-            android:id="@+id/textViewUserNumber"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/darker_gray"
-            android:text="건물" />
-
-        <EditText
-            android:id="@+id/textViewBuildingName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/darker_gray"
-            android:text="층" />
-
-        <EditText
-            android:id="@+id/textViewBuildingFloor"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
-
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/check"
-        android:layout_width="136dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="550dp"
-        android:layout_marginBottom="163dp"
-        android:background="@drawable/round_value"
-        android:text="확인"
-        android:textColor="@android:color/holo_blue_dark"
-        android:textSize="24sp" />
-
-    <Button
-        android:id="@+id/button4"
-        android:layout_width="136dp"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@id/check"
-        android:layout_alignBottom="@id/check"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="0dp"
-        android:layout_marginBottom="0dp"
-        android:background="@drawable/round_value"
-        android:text="취소"
-        android:textColor="@android:color/holo_blue_dark"
-        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:text="본인확인"
         android:textColor="@android:color/holo_blue_dark"
-        android:textSize="48sp"
-        android:text="인증확인" />
+        android:textSize="48sp" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="학번"
+        android:textColor="@android:color/darker_gray" />
 
-</RelativeLayout>
+    <EditText
+        android:id="@+id/textViewUserNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="건물"
+        android:textColor="@android:color/darker_gray" />
+
+    <EditText
+        android:id="@+id/textViewBuildingName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="층"
+        android:textColor="@android:color/darker_gray" />
+
+    <EditText
+        android:id="@+id/textViewBuildingFloor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/check"
+            android:layout_width="0sp"
+            android:layout_height="wrap_content"
+
+            android:layout_weight="5"
+            android:background="@drawable/round_value"
+            android:text="확인"
+            android:textColor="@android:color/holo_blue_dark"
+            android:layout_margin="4sp"
+            android:textSize="24sp"/>
+
+        <Button
+            android:id="@+id/cancel"
+            android:layout_width="0sp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4sp"
+
+            android:layout_weight="5"
+            android:background="@drawable/round_value"
+            android:text="취소"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textSize="24sp" />
+    </LinearLayout>
+</LinearLayout>

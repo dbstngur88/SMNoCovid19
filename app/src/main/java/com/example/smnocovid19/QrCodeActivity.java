@@ -9,16 +9,24 @@ import android.renderscript.Sampler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -31,10 +39,18 @@ import java.util.HashMap;
 import static java.security.AccessController.getContext;
 
 public class QrCodeActivity extends AppCompatActivity {
-    private Button btn_check;
-    private TextView textViewUserNumber, textViewBuildingFloor, textViewBuildingName, textViewUpdateTime;
+    private FirebaseAuth fAuth;
+    FirebaseFirestore fStore;
+    private FirebaseUser currentUser;
+    private Button btn_check, btn_cancel;
+    private TextView textViewUserNumber, textViewBuildingFloor, textViewBuildingName;
     private IntentIntegrator qrScan;
     private DatabaseReference mDatabase;
+    String subUserNumber;
+    String fStoreStudentNumber;
+    String userEmail;
+    String fStoreEmail;
+    Intent intent;
     int a = 0;
 
     long now = System.currentTimeMillis();
@@ -47,31 +63,47 @@ public class QrCodeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrcode);
 
+        fAuth = FirebaseAuth.getInstance();
+        fStore = FirebaseFirestore.getInstance();
+        currentUser = fAuth.getCurrentUser();
+        userEmail = currentUser.getEmail();
+
         btn_check = findViewById(R.id.check);
+        btn_cancel = findViewById(R.id.cancel);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         readUser();
+        setUserInfo();
+
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intent = new Intent(QrCodeActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
         btn_check.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // String getUserNumber = textViewUserNumber.getText().toString();
+                String getUserNumber = textViewUserNumber.getText().toString();
                 String getBuildingFloor = textViewBuildingFloor.getText().toString();
                 String getBuildingName = textViewBuildingName.getText().toString();
                 String getUpdateTime = formatDate;
 
                 HashMap result = new HashMap<>();
-               // result.put("학번", getUserNumber);
+                result.put("학번", getUserNumber);
                 result.put("층", getBuildingFloor);
                 result.put("건물", getBuildingName);
                 result.put("입장시간", getUpdateTime);
 
                 a = a + 1;
-                writeNewUser(a, getBuildingFloor, getBuildingName, getUpdateTime);
-
+                writeNewUser(a, getUserNumber, getBuildingFloor, getBuildingName, getUpdateTime);
+                intent = new Intent(QrCodeActivity.this, MainActivity.class);
+                startActivity(intent);
             }
         });
 
-       // textViewUserNumber = (TextView) findViewById(R.id.textViewUserNumber);
+        textViewUserNumber = (TextView) findViewById(R.id.textViewUserNumber);
         textViewBuildingName = (TextView) findViewById(R.id.textViewBuildingName);
         textViewBuildingFloor = (TextView) findViewById(R.id.textViewBuildingFloor);
 //        textViewUpdateTime = findViewById(R.id.textViewUpdateTime);
@@ -89,10 +121,14 @@ public class QrCodeActivity extends AppCompatActivity {
             if (result.getContents() == null) {
                 Toast.makeText(QrCodeActivity.this, "취소하였습니다", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(QrCodeActivity.this, "인식되었습니다 " + result.getContents(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(QrCodeActivity.this, "인식되었습니다 " , Toast.LENGTH_SHORT).show();
+
+//                findUserNum();
+                textViewUserNumber.setText(subUserNumber);
                 try {
                     JSONObject obj = new JSONObject(result.getContents());
-                   // textViewUserNumber.setText(obj.getString(""));
+
+//                    textViewUserNumber.setText(obj.getString("studentnumber"));
                     textViewBuildingName.setText(obj.getString("buildingName"));
                     textViewBuildingFloor.setText(obj.getString("buildingFloor"));
 //                    textViewUpdateTime.setText(obj.getString("updateDate"));
@@ -106,8 +142,8 @@ public class QrCodeActivity extends AppCompatActivity {
         }
     }
 
-    private void writeNewUser(int userId, String getBuildingFloor, String getBuildingName, String getUpdateTime) {
-        User user = new User(getBuildingFloor, getBuildingName, getUpdateTime);
+    private void writeNewUser(int userId, String getUserNumber, String getBuildingFloor, String getBuildingName, String getUpdateTime) {
+        User user = new User(getUserNumber, getBuildingFloor, getBuildingName, getUpdateTime);
 
         mDatabase.child("timeline").child(String.valueOf(userId)).setValue(user)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -123,6 +159,7 @@ public class QrCodeActivity extends AppCompatActivity {
                     }
                 });
     }
+
     private void readUser() {
         mDatabase.child("timeline").child("1").addValueEventListener(new ValueEventListener() {
             @Override
@@ -139,6 +176,46 @@ public class QrCodeActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+//    private void findUserNum() {
+//
+//    }
+
+    public void setUserInfo() {
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        fStore.collection("users")
+                .whereEqualTo("email", userEmail)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                fStoreEmail = (String) document.get("email");
+                                fStoreStudentNumber = (String) document.get("studentnumber");
+                            }
+                        } else {
+                            Toast.makeText(QrCodeActivity.this, "에러 발생", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+        db.collection("users")
+                .whereEqualTo("studentnumber", fStoreStudentNumber)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for(QueryDocumentSnapshot document : task.getResult()) {
+                                subUserNumber = (String) document.get("studentnumber");
+                            }
+                        } else {
+                            Toast.makeText(QrCodeActivity.this, "학번이 없습니다", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
 }

@@ -104,6 +104,5 @@
             android:textSize="24sp"
             android:onClick="mClick"
             />
-
     </LinearLayout>
 </LinearLayout>

@@ -10,8 +10,8 @@ public class User {
 
     }
 
-    public User(String buildingFloor, String buildingName, String updateTime) {
-//        this.userNumber = userNumber;
+    public User(String getUserNumber, String buildingFloor, String buildingName, String updateTime) {
+        this.userNumber = userNumber;
         this.buildingFloor = buildingFloor;
         this.buildingName = buildingName;
         this.updateTime = updateTime;
@@ -52,7 +52,7 @@ public class User {
     @Override
     public String toString() {
         return "timeline{" +
-//                "userNumber ='" + userNumber + '\'' +
+                "userNumber ='" + userNumber + '\'' +
                 " buildingFloor ='" + buildingFloor + '\'' +
                 ", buildingName ='" + buildingName + '\'' +
                 ", updateTime ='" + updateTime + '\'' +
