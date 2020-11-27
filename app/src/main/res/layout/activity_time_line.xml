@@ -11,8 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
-            android:background="@color/colorWhite"
-            android:id="@+id/txtUserNumber"
+            android:background="@drawable/itemdraw"
+            android:id="@+id/txtUserInfo"
             android:layout_width="0sp"
             android:layout_height="60sp"
             android:layout_weight="1"
@@ -20,7 +20,9 @@
             android:layout_gravity="center_horizontal"
             android:textStyle="bold"
             android:gravity="center"
-            android:textSize="30dp">
+            android:layout_margin="5dp"
+            android:padding="5dp"
+            android:textSize="25dp">
     </TextView>
     </LinearLayout>
     <LinearLayout

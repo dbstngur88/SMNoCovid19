@@ -59,16 +59,18 @@ public class TimeLineActivity extends AppCompatActivity {
     TextView txtBuilding;
     TextView txtFloor;
     TextView txtTime;
-    TextView txtUserNumber;
+    TextView txtUserInfo;
+    String userInfo;
     String userEmail;
     String fStoreStudentNumber;
+    String fStoreName;
+    String fStoreMajor;
     String userNumber;
     String indexNum;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time_line);
-        setTitle("사용자의 동선이동 타임라인");
 
         //액션바 안보이게 지정
         ActionBar actionBar = getSupportActionBar();
@@ -81,7 +83,7 @@ public class TimeLineActivity extends AppCompatActivity {
         txtBuilding = findViewById(R.id.txtBuilding);
         txtFloor = findViewById(R.id.txtFloor);
         txtTime = findViewById(R.id.txtTime);
-        txtUserNumber = findViewById(R.id.txtUserNumber);
+        txtUserInfo = findViewById(R.id.txtUserInfo);
         //recyclerview 설정
         mRecyclerView = findViewById(R.id.timeline_view);
         layoutManager = new LinearLayoutManager(this);
@@ -99,7 +101,7 @@ public class TimeLineActivity extends AppCompatActivity {
 
     }
     public void getTimeLine() {
-        mDatabase.child("timeline_"+indexNum)
+        mDatabase.child("timeline_"+fStoreStudentNumber)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -129,12 +131,10 @@ public class TimeLineActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
+                                fStoreName = (String) document.get("name");
+                                fStoreMajor = (String) document.get("major");
                                 fStoreStudentNumber = (String)document.get("studentnumber");
-                                txtUserNumber.setText(fStoreStudentNumber+"님의 타임라인");
-                                userNumber = txtUserNumber.getText().toString();
-                                int idx = userNumber.indexOf("님");
-                                indexNum = userNumber.substring(0,idx);
-                                Log.d(TAG+"", indexNum);
+                                txtUserInfo.setText(fStoreMajor + " "+fStoreName + " 님의 타임라인");
                                 getTimeLine();
                             }
                         } else {
