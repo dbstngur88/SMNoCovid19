@@ -173,7 +173,8 @@ public class MainActivity extends AppCompatActivity {
         accessDoc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://sws.sunmoon.ac.kr/FS/Myinfo/Questionaire.aspx"));
+                Intent intent = new Intent(MainActivity.this,WebActivity.class);
+                intent.putExtra("site_url","https://sws.sunmoon.ac.kr/Questionnaire_Guest.aspx?roleno=" + fStoreStudentNum);
                 startActivity(intent);
             }
         });
