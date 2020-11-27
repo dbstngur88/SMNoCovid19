@@ -145,7 +145,7 @@ public class QrCodeActivity extends AppCompatActivity {
     private void writeNewUser(int userId, String getUserNumber, String getBuildingFloor, String getBuildingName, String getUpdateTime) {
         User user = new User(getBuildingFloor, getBuildingName, getUpdateTime);
 
-        mDatabase.child("timeline_" + getUserNumber).child(getUpdateTime).setValue(user)
+        mDatabase.child("timeline").child(getUserNumber).child(getUpdateTime).setValue(user)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -177,11 +177,6 @@ public class QrCodeActivity extends AppCompatActivity {
         });
 
     }
-
-//    private void findUserNum() {
-//
-//    }
-
     public void getUserInfo() {
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("users")
