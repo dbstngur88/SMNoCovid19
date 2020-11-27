@@ -42,6 +42,9 @@ import java.util.Map;
 
 public class TimeLineActivity extends AppCompatActivity {
     List<User> timeLineList = new ArrayList<>();
+    private FirebaseAuth fAuth;
+    FirebaseFirestore fStore;
+    private FirebaseUser currentUser;
     RecyclerView mRecyclerView;
     Context context;
 
@@ -62,6 +65,11 @@ public class TimeLineActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time_line);
         setTitle("Time Line");
+
+        fAuth = FirebaseAuth.getInstance();
+        fStore = FirebaseFirestore.getInstance();
+        currentUser = fAuth.getCurrentUser();
+        userEmail = currentUser.getEmail();
 
         txtBuilding = findViewById(R.id.txtBuilding);
         txtFloor = findViewById(R.id.txtFloor);
