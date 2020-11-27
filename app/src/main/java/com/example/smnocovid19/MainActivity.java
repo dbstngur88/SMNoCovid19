@@ -2,13 +2,17 @@ package com.example.smnocovid19;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,12 +33,19 @@ public class MainActivity extends AppCompatActivity {
     String userEmail;
     String fStoreName;
     String fStoreMajor;
+    String fStorePhoneNum;
+    String fStoreStudentNum;
 
     TextView viewUserInfo;
     //현재 로그인 된 유저 정보를 담을 변수
     private FirebaseUser currentUser;
 
-
+    //DrawerView 관련 선언
+    LinearLayout drawerView;
+    DrawerLayout drawerLayout;
+    TextView drawerName, drawerUserInfo, drawerIntroMsg;
+    Button drawerAppInfo,drawerSignOut;
+    ImageView openDrawerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +56,13 @@ public class MainActivity extends AppCompatActivity {
         //액션바 안보이게 지정
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
+
+        //로그인이 자동으로 성공할 경우 성공 문자열 넣기
+        intent = getIntent();
+        String getLoginData = intent.getStringExtra("autoLogin");
+        if(getLoginData != null){
+            Toast.makeText(MainActivity.this, "자동 로그인 성공", Toast.LENGTH_SHORT).show();
+        }
 
         button1 = findViewById(R.id.button1);
         button2 = findViewById(R.id.button2);
@@ -59,8 +77,57 @@ public class MainActivity extends AppCompatActivity {
 
         setUserInfo();
 
-        intent = new Intent();
-        
+        //drawerView 구현
+        drawerLayout = findViewById(R.id.drawerLayout);
+        drawerView = findViewById(R.id.drawerView);
+        openDrawerView = findViewById(R.id.openDrawerView);
+
+        drawerName = drawerView.findViewById(R.id.name);
+        drawerUserInfo = drawerView.findViewById(R.id.userInfo);
+        drawerIntroMsg = drawerView.findViewById(R.id.introMsg);
+        drawerAppInfo = drawerView.findViewById(R.id.btnAppInfo);
+        drawerSignOut = drawerView.findViewById(R.id.btnLogout);
+
+        drawerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.closeDrawer(drawerView);
+            }
+        });
+
+        drawerSignOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fAuth.getInstance().signOut();
+                // Check if user is signed in (non-null) and update UI accordingly.
+                currentUser = fAuth.getCurrentUser();
+                if(currentUser == null){
+                    intent = new Intent(MainActivity.this, LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.putExtra("logout","logout");
+                    startActivity(intent);
+                    finish();
+                }
+            }
+        });
+
+        drawerAppInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder box = new AlertDialog.Builder(MainActivity.this);
+                box.setTitle("Application Info");
+                box.setMessage("개발팀 : 군침이 사악\n개발 기간 : 2020.11.01 ~ 2020.11.28\n구현방법" +
+                        "\n로그인,회원가입,비밀번호찾기 : FireBase 인증" +
+                        "\n사용자 정보 저장 : FireBase FireStore\n좌측 바 : DrawerLayout" +
+                        "\n메인페이지 : 각 버튼을 통해 이동" +
+                        "\n지도 검색 : GoogleMaps" +
+                        "\n\n시연에 참여해주셔서 감사합니다.");
+
+                box.setPositiveButton("닫기",null);
+                box.show();
+            }
+        });
+
         //장동민 개발 내역 연결 버튼
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,6 +155,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //드로어뷰 여는 코드, 가장 밑에 작성
+        openDrawerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.openDrawer(drawerView);
+            }
+        });
     }
 
     public void mClick(View view) {
@@ -118,8 +192,12 @@ public class MainActivity extends AppCompatActivity {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 fStoreName = (String) document.get("name");
                                 fStoreMajor = (String) document.get("major");
+                                fStorePhoneNum = (String) document.get("phonenum");
+                                fStoreStudentNum = (String) document.get("studentnumber");
 
                                 viewUserInfo.setText(fStoreMajor + "\n" + fStoreName + "님, 환영합니다.") ;
+                                drawerName.setText(fStoreName + "님, 환영합니다.");
+                                drawerUserInfo.setText("학과 : "+ fStoreMajor + "\n학번 : " + fStoreStudentNum + "\n연락처 : " + fStorePhoneNum);
                             }
                         } else {
                             Toast.makeText(MainActivity.this,"유저 정보 출력 오류",Toast.LENGTH_SHORT).show();
