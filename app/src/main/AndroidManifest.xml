@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.smnocovid19">
 
     <application
@@ -9,19 +10,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".QrCodeActivity"
+        <activity android:name=".CoronaMapActivity"></activity>
+        <activity xmlns:tools="http://schemas.android.com/tools"
+            android:name=".QrCodeActivity"
             android:screenOrientation="fullSensor"
-            xmlns:tools="http://schemas.android.com/tools"
             tools:replace="screenOrientation" />
-        <activity android:name=".FindInfoActivity"></activity>
+        <activity android:name=".FindInfoActivity" />
+
         <service
             android:name=".PushAlarmActivity"
             android:stopWithTask="false">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+
         <activity android:name=".RegisterActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".TimeLineActivity" />

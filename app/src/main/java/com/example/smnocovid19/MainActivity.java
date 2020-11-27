@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                intent = new Intent(MainActivity.this, LoginActivity.class);
+                intent = new Intent(MainActivity.this, CoronaMapActivity.class);
                 startActivity(intent);
             }
         });
