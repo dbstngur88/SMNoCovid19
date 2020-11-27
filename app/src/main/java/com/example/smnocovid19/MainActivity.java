@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     String fStoreMajor;
     String fStorePhoneNum;
     String fStoreStudentNum;
+    ImageView smCoronaLive;
 
     TextView viewUserInfo;
     //현재 로그인 된 유저 정보를 담을 변수
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
         button2 = findViewById(R.id.button2);
         button3 = findViewById(R.id.button3);
         viewUserInfo = findViewById(R.id.userInfo);
+        smCoronaLive = findViewById(R.id.smcoronaimg);
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
 
@@ -128,6 +130,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //선문대학교 코로나19 현황 페이지 링크
+        smCoronaLive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,WebActivity.class);
+                intent.putExtra("site_url","https://lily.sunmoon.ac.kr/Page/Story/VirusNotice.aspx");
+                startActivity(intent);
+            }
+        });
         //장동민 개발 내역 연결 버튼
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
