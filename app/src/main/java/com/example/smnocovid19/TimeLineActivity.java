@@ -2,6 +2,7 @@ package com.example.smnocovid19;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -62,11 +63,16 @@ public class TimeLineActivity extends AppCompatActivity {
     String userEmail;
     String fStoreStudentNumber;
     String userNumber;
+    String indexNum;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time_line);
         setTitle("사용자의 동선이동 타임라인");
+
+        //액션바 안보이게 지정
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
 
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
@@ -93,7 +99,7 @@ public class TimeLineActivity extends AppCompatActivity {
 
     }
     public void getTimeLine() {
-        mDatabase.child("timeline_"+userNumber)
+        mDatabase.child("timeline_"+indexNum)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -124,8 +130,11 @@ public class TimeLineActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 fStoreStudentNumber = (String)document.get("studentnumber");
-                                txtUserNumber.setText(fStoreStudentNumber);
+                                txtUserNumber.setText(fStoreStudentNumber+"님의 타임라인");
                                 userNumber = txtUserNumber.getText().toString();
+                                int idx = userNumber.indexOf("님");
+                                indexNum = userNumber.substring(0,idx);
+                                Log.d(TAG+"", indexNum);
                                 getTimeLine();
                             }
                         } else {
