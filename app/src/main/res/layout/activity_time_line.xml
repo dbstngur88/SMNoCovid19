@@ -3,37 +3,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorWhite"
     android:orientation="vertical"
     tools:context=".TimeLineActivity">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >  <TextView
-        android:id="@+id/txtUserNumber"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="학번"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:textSize="30dp">
+        android:layout_height="wrap_content">
+        <TextView
+            android:background="@color/colorWhite"
+            android:id="@+id/txtUserNumber"
+            android:layout_width="0sp"
+            android:layout_height="60sp"
+            android:layout_weight="1"
+            android:text="학번"
+            android:layout_gravity="center_horizontal"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textSize="30dp">
     </TextView>
-
-
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp">
 
-
-
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="10dp">
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/timeline_view"
         tools:listitem="@layout/timeline_item"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_width="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
    </LinearLayout>
