@@ -7,10 +7,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -57,13 +60,13 @@ public class TimeLineActivity extends AppCompatActivity {
     TextView txtTime;
     TextView txtUserNumber;
     String userEmail;
-    String userNumber;
     String fStoreStudentNumber;
+    String userNumber;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time_line);
-        setTitle("Time Line");
+        setTitle("사용자의 동선이동 타임라인");
 
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
@@ -82,14 +85,15 @@ public class TimeLineActivity extends AppCompatActivity {
         adapter = new TimeLineAdapter(TimeLineActivity.this, timeLineList, context);
         mRecyclerView.setAdapter(adapter);
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        userNumber = "2016244097";
-        //유저 정보 불러오기 메소드 실행
+
         getUserNumber();
+        //유저 정보 불러오기 메소드 실행
+
         //타임라인 불러오기 메소드 실행
-        getTimeLine();
+
     }
     public void getTimeLine() {
-        mDatabase.child("timeline_"+fStoreStudentNumber)
+        mDatabase.child("timeline_"+userNumber)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -109,6 +113,7 @@ public class TimeLineActivity extends AppCompatActivity {
                 });
     }
     public void getUserNumber() {
+
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("users")
                 .whereEqualTo("email", userEmail)
@@ -119,8 +124,9 @@ public class TimeLineActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 fStoreStudentNumber = (String)document.get("studentnumber");
-                                Log.d(TAG+"",fStoreStudentNumber);
                                 txtUserNumber.setText(fStoreStudentNumber);
+                                userNumber = txtUserNumber.getText().toString();
+                                getTimeLine();
                             }
                         } else {
                             Toast.makeText(TimeLineActivity.this, "에러 발생", Toast.LENGTH_SHORT).show();
