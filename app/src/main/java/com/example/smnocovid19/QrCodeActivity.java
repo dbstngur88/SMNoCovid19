@@ -65,7 +65,6 @@ public class QrCodeActivity extends AppCompatActivity {
         textViewUserNumber = (TextView) findViewById(R.id.textViewUserNumber);
         textViewBuildingName = (TextView) findViewById(R.id.textViewBuildingName);
         textViewBuildingFloor = (TextView) findViewById(R.id.textViewBuildingFloor);
-//        textViewUpdateTime = findViewById(R.id.textViewUpdateTime);
 
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
@@ -112,7 +111,6 @@ public class QrCodeActivity extends AppCompatActivity {
         qrScan.setPrompt("사각형에 QR코드를 맞춰주세요");
         qrScan.initiateScan();
 
-
     }
 
     @Override
@@ -121,24 +119,33 @@ public class QrCodeActivity extends AppCompatActivity {
         if (result != null) {
             if (result.getContents() == null) {
                 Toast.makeText(QrCodeActivity.this, "취소하였습니다", Toast.LENGTH_SHORT).show();
+                intent = new Intent(QrCodeActivity.this, MainActivity.class);
+                startActivity(intent);
             } else {
                 Toast.makeText(QrCodeActivity.this, "인식되었습니다 " , Toast.LENGTH_SHORT).show();
-
 //                findUserNum();
                 try {
                     JSONObject obj = new JSONObject(result.getContents());
 
-//                    textViewUserNumber.setText(obj.getString("studentnumber"));
+//                   textViewUserNumber.setText(obj.getString("studentnumber"));
                     textViewBuildingName.setText(obj.getString("buildingName"));
                     textViewBuildingFloor.setText(obj.getString("buildingFloor"));
+                    String getsBuildingFloor = textViewBuildingFloor.getText().toString();
+                    String getsBuildingName = textViewBuildingName.getText().toString();
+                    writeNewUser(a, fStoreStudentNumber, getsBuildingFloor, getsBuildingName, formatDate);
 //                    textViewUpdateTime.setText(obj.getString("updateDate"));
+                    intent = new Intent(QrCodeActivity.this, MainActivity.class);
+                    startActivity(intent);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     textViewBuildingName.setText(result.getContents());
                 }
+
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
+            intent = new Intent(QrCodeActivity.this, MainActivity.class);
+            startActivity(intent);
         }
     }
 

@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="본인확인"
+        android:text="등록 정보 확인"
         android:textColor="@android:color/holo_blue_dark"
         android:textSize="48sp" />
 
@@ -32,7 +32,8 @@
         android:id="@+id/textViewUserNumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text=""
+        android:enabled="false"
+
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
     <TextView
@@ -46,6 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text=""
+        android:enabled="false"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
     <TextView
@@ -59,6 +61,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text=""
+        android:enabled="false"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
     <LinearLayout
