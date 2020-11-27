@@ -15,10 +15,12 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 public class PushAlarmActivity extends FirebaseMessagingService {
+
     @Override
-    public void onNewToken(String s) {
+    public void onNewToken(String s) { // 앱 실행시 logcat에서 로그값 확인가능
         super.onNewToken(s);
-        Log.d("FCM_TEST", s);
+        Log.d("FCM_TEST" ,s);
+
     }
 
     @Override
