@@ -54,23 +54,101 @@
             android:layout_height="270sp"
             android:src="@drawable/sunmooncorona"
             />
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="장동민 개발 내역" />
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="570sp"
+            >
+            <TableRow>
+                <LinearLayout
+                    android:id="@+id/qrCodeScan"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    >
+                    <ImageView
+                        android:layout_width="240sp"
+                        android:layout_height="240sp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/code_scan"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="QR코드 스캔"
+                        android:layout_gravity="center"
+                        android:textSize="30sp"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/timeline"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    >
+                    <ImageView
+                        android:layout_width="240sp"
+                        android:layout_height="240sp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/timeline"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="동선 기록 확인"
+                        android:textSize="30sp"
+                        android:layout_gravity="center"
+                        />
+                </LinearLayout>
+            </TableRow>
+            <TableRow>
+                <LinearLayout
+                    android:id="@+id/coronaMap"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    >
+                    <ImageView
+                        android:layout_width="240sp"
+                        android:layout_height="240sp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/map"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="확진자 방문지"
+                        android:textSize="30sp"
+                        android:layout_gravity="center"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/document"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    >
+                    <ImageView
+                        android:layout_width="240sp"
+                        android:layout_height="240sp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/pencil"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="코로나 19 문진표"
+                        android:textSize="30sp"
+                        android:layout_gravity="center"
+                        />
+                </LinearLayout>
+            </TableRow>
+        </TableLayout>
 
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="박민석 개발 내역" />
 
-        <Button
-            android:id="@+id/button3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="윤수혁 개발 내역" />
 
 
     </LinearLayout>

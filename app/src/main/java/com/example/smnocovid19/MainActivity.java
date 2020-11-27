@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -26,7 +27,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 public class MainActivity extends AppCompatActivity {
-    Button button1, button2, button3;
+    LinearLayout qrScan, timeLine, coronaMap, accessDoc;
     Intent intent;
     private FirebaseAuth fAuth;
     FirebaseFirestore fStore;
@@ -65,9 +66,11 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "자동 로그인 성공", Toast.LENGTH_SHORT).show();
         }
 
-        button1 = findViewById(R.id.button1);
-        button2 = findViewById(R.id.button2);
-        button3 = findViewById(R.id.button3);
+        qrScan = findViewById(R.id.qrCodeScan);
+        timeLine = findViewById(R.id.timeline);
+        coronaMap = findViewById(R.id.coronaMap);
+        accessDoc = findViewById(R.id.document);
+
         viewUserInfo = findViewById(R.id.userInfo);
         smCoronaLive = findViewById(R.id.smcoronaimg);
         fAuth = FirebaseAuth.getInstance();
@@ -139,8 +142,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        //장동민 개발 내역 연결 버튼
-        button1.setOnClickListener(new View.OnClickListener() {
+        //qr코드 스캔 기능 intent
+        qrScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 intent = new Intent(MainActivity.this, QrCodeActivity.class);
@@ -148,8 +151,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //박민석 개발 내역 연결 버튼
-        button2.setOnClickListener(new View.OnClickListener() {
+        //타임라인 기능 intent
+        timeLine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 intent = new Intent(MainActivity.this, TimeLineActivity.class);
@@ -157,11 +160,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //윤수혁 개발 내역 연결 버튼
-        button3.setOnClickListener(new View.OnClickListener() {
+        //코로나 맵 기능 intent
+        coronaMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 intent = new Intent(MainActivity.this, CoronaMapActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        //문진표 웹 intent
+        accessDoc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://sws.sunmoon.ac.kr/FS/Myinfo/Questionaire.aspx"));
                 startActivity(intent);
             }
         });

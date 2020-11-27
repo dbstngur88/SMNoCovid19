@@ -11,6 +11,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class WebActivity extends AppCompatActivity {
     ProgressDialog progress;
@@ -26,7 +27,7 @@ public class WebActivity extends AppCompatActivity {
         actionBar.hide();
         Intent intent = getIntent();
         String strLink = intent.getStringExtra("site_url");
-
+        String printMsg = intent.getStringExtra("print_msg");
 
         WebView web = (WebView)findViewById(R.id.web);
 
@@ -37,6 +38,8 @@ public class WebActivity extends AppCompatActivity {
         webSettings.setJavaScriptEnabled(true);
         web.setWebViewClient(new MyWebView());
         web.loadUrl(strLink);
+
+        Toast.makeText(WebActivity.this, printMsg, Toast.LENGTH_SHORT).show();
     }
 
     public class MyWebView extends WebViewClient {
