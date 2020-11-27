@@ -47,18 +47,17 @@ public class TimeLineActivity extends AppCompatActivity {
     private FirebaseUser currentUser;
     RecyclerView mRecyclerView;
     Context context;
-
+    private DatabaseReference mDatabase;
     RecyclerView.LayoutManager layoutManager;
 
     TimeLineAdapter adapter;
-    private DatabaseReference timeLineDbRef;
     private static final String TAG = "TimeLineActivity";
     TextView txtBuilding;
     TextView txtFloor;
     TextView txtTime;
     TextView txtUserNumber;
-    String number;
     String userEmail;
+    String userNumber;
     String fStoreStudentNumber;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +69,6 @@ public class TimeLineActivity extends AppCompatActivity {
         fStore = FirebaseFirestore.getInstance();
         currentUser = fAuth.getCurrentUser();
         userEmail = currentUser.getEmail();
-
         txtBuilding = findViewById(R.id.txtBuilding);
         txtFloor = findViewById(R.id.txtFloor);
         txtTime = findViewById(R.id.txtTime);
@@ -83,15 +81,15 @@ public class TimeLineActivity extends AppCompatActivity {
         //어뎁터 선언시 초기화
         adapter = new TimeLineAdapter(TimeLineActivity.this, timeLineList, context);
         mRecyclerView.setAdapter(adapter);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        userNumber = "2016244097";
         //유저 정보 불러오기 메소드 실행
         getUserNumber();
-        getTimeLine();
-
         //타임라인 불러오기 메소드 실행
-
+        getTimeLine();
     }
     public void getTimeLine() {
-        FirebaseDatabase.getInstance().getReference().child("timeline_"+"2016244097")
+        mDatabase.child("timeline_"+fStoreStudentNumber)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -121,6 +119,7 @@ public class TimeLineActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 fStoreStudentNumber = (String)document.get("studentnumber");
+                                Log.d(TAG+"",fStoreStudentNumber);
                                 txtUserNumber.setText(fStoreStudentNumber);
                             }
                         } else {
