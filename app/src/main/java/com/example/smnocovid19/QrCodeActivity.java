@@ -46,7 +46,6 @@ public class QrCodeActivity extends AppCompatActivity {
     private TextView textViewUserNumber, textViewBuildingFloor, textViewBuildingName;
     private IntentIntegrator qrScan;
     private DatabaseReference mDatabase;
-    String subUserNumber;
     String fStoreStudentNumber;
     String userEmail;
     String fStoreEmail;
