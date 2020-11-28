@@ -1,0 +1,361 @@
+Index: app/src/main/java/com/example/smnocovid19/QrCodeActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.smnocovid19;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\nimport android.renderscript.Sampler;\r\nimport android.util.Log;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.EditText;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport com.google.android.gms.tasks.OnCompleteListener;\r\nimport com.google.android.gms.tasks.OnFailureListener;\r\nimport com.google.android.gms.tasks.OnSuccessListener;\r\nimport com.google.android.gms.tasks.Task;\r\nimport com.google.firebase.auth.FirebaseAuth;\r\nimport com.google.firebase.auth.FirebaseUser;\r\nimport com.google.firebase.database.DataSnapshot;\r\nimport com.google.firebase.database.DatabaseError;\r\nimport com.google.firebase.database.DatabaseReference;\r\nimport com.google.firebase.database.FirebaseDatabase;\r\nimport com.google.firebase.database.ValueEventListener;\r\nimport com.google.firebase.firestore.FirebaseFirestore;\r\nimport com.google.firebase.firestore.QueryDocumentSnapshot;\r\nimport com.google.firebase.firestore.QuerySnapshot;\r\nimport com.google.zxing.integration.android.IntentIntegrator;\r\nimport com.google.zxing.integration.android.IntentResult;\r\n\r\nimport org.json.JSONException;\r\nimport org.json.JSONObject;\r\n\r\nimport java.text.SimpleDateFormat;\r\nimport java.util.Date;\r\nimport java.util.HashMap;\r\nimport static java.security.AccessController.getContext;\r\n\r\npublic class QrCodeActivity extends AppCompatActivity {\r\n    private FirebaseAuth fAuth;\r\n    FirebaseFirestore fStore;\r\n    private FirebaseUser currentUser;\r\n    private Button btn_check, btn_cancel;\r\n    private TextView textViewUserNumber, textViewBuildingFloor, textViewBuildingName;\r\n    private IntentIntegrator qrScan;\r\n    private DatabaseReference mDatabase;\r\n    String subUserNumber;\r\n    String fStoreStudentNumber;\r\n    String userEmail;\r\n    String fStoreEmail;\r\n    Intent intent;\r\n    int a = 0;\r\n\r\n    long now = System.currentTimeMillis();\r\n    Date date = new Date(now);\r\n    SimpleDateFormat sdfNow = new SimpleDateFormat(\"yyyy-MM-dd HH:mm:ss\");\r\n    private String formatDate = sdfNow.format(date); // 현재시간을 가지고있음.\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_qrcode);\r\n\r\n        textViewUserNumber = (TextView) findViewById(R.id.textViewUserNumber);\r\n        textViewBuildingName = (TextView) findViewById(R.id.textViewBuildingName);\r\n        textViewBuildingFloor = (TextView) findViewById(R.id.textViewBuildingFloor);\r\n//        textViewUpdateTime = findViewById(R.id.textViewUpdateTime);\r\n\r\n        fAuth = FirebaseAuth.getInstance();\r\n        fStore = FirebaseFirestore.getInstance();\r\n        currentUser = fAuth.getCurrentUser();\r\n        userEmail = currentUser.getEmail();\r\n\r\n        btn_check = findViewById(R.id.check);\r\n        btn_cancel = findViewById(R.id.cancel);\r\n        mDatabase = FirebaseDatabase.getInstance().getReference();\r\n        readUser();\r\n        getUserInfo();\r\n\r\n        btn_cancel.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                intent = new Intent(QrCodeActivity.this, MainActivity.class);\r\n                startActivity(intent);\r\n            }\r\n        });\r\n\r\n        btn_check.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                String getUserNumber = textViewUserNumber.getText().toString();\r\n                String getBuildingFloor = textViewBuildingFloor.getText().toString();\r\n                String getBuildingName = textViewBuildingName.getText().toString();\r\n                String getUpdateTime = formatDate;\r\n\r\n                HashMap result = new HashMap<>();\r\n                result.put(\"학번\", getUserNumber);\r\n                result.put(\"층\", getBuildingFloor);\r\n                result.put(\"건물\", getBuildingName);\r\n                result.put(\"입장시간\", getUpdateTime);\r\n\r\n                a = a + 1;\r\n                writeNewUser(a, getUserNumber, getBuildingFloor, getBuildingName, getUpdateTime);\r\n                intent = new Intent(QrCodeActivity.this, MainActivity.class);\r\n                startActivity(intent);\r\n            }\r\n        });\r\n\r\n        qrScan = new IntentIntegrator(this);\r\n        qrScan.setOrientationLocked(false);\r\n        qrScan.setPrompt(\"사각형에 QR코드를 맞춰주세요\");\r\n        qrScan.initiateScan();\r\n\r\n\r\n    }\r\n\r\n    @Override\r\n    protected void onActivityResult(int requestCode, int resultCode, Intent data) {\r\n        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);\r\n        if (result != null) {\r\n            if (result.getContents() == null) {\r\n                Toast.makeText(QrCodeActivity.this, \"취소하였습니다\", Toast.LENGTH_SHORT).show();\r\n            } else {\r\n                Toast.makeText(QrCodeActivity.this, \"인식되었습니다 \" , Toast.LENGTH_SHORT).show();\r\n\r\n//                findUserNum();\r\n                try {\r\n                    JSONObject obj = new JSONObject(result.getContents());\r\n\r\n//                    textViewUserNumber.setText(obj.getString(\"studentnumber\"));\r\n                    textViewBuildingName.setText(obj.getString(\"buildingName\"));\r\n                    textViewBuildingFloor.setText(obj.getString(\"buildingFloor\"));\r\n//                    textViewUpdateTime.setText(obj.getString(\"updateDate\"));\r\n                } catch (JSONException e) {\r\n                    e.printStackTrace();\r\n                    textViewBuildingName.setText(result.getContents());\r\n                }\r\n            }\r\n        } else {\r\n            super.onActivityResult(requestCode, resultCode, data);\r\n        }\r\n    }\r\n\r\n    private void writeNewUser(int userId, String getUserNumber, String getBuildingFloor, String getBuildingName, String getUpdateTime) {\r\n        User user = new User(getBuildingFloor, getBuildingName, getUpdateTime);\r\n\r\n        mDatabase.child(\"timeline\").child(getUserNumber).child(getUpdateTime).setValue(user)\r\n                .addOnSuccessListener(new OnSuccessListener<Void>() {\r\n                    @Override\r\n                    public void onSuccess(Void aVoid) {\r\n                        Toast.makeText(QrCodeActivity.this, \"등록되었습니다\", Toast.LENGTH_SHORT).show();\r\n                    }\r\n                })\r\n                .addOnFailureListener(new OnFailureListener() {\r\n                    @Override\r\n                    public void onFailure(@NonNull Exception e) {\r\n                        Toast.makeText(QrCodeActivity.this,\"등록을 실패했습니다\", Toast.LENGTH_SHORT).show();\r\n                    }\r\n                });\r\n    }\r\n\r\n    private void readUser() {\r\n        mDatabase.child(\"timeline\").child(\"1\").addValueEventListener(new ValueEventListener() {\r\n            @Override\r\n            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {\r\n                if (dataSnapshot.getValue(User.class) != null) {\r\n                    User post = dataSnapshot.getValue(User.class);\r\n                    Log.w(\"FireBaseData\", \"getData\" + post.toString());\r\n                }\r\n            }\r\n\r\n            @Override\r\n            public void onCancelled(@NonNull DatabaseError databaseError) {\r\n                Log.w(\"FireBaseData\", \"loadPost:onCancelled\", databaseError.toException());\r\n            }\r\n        });\r\n\r\n    }\r\n\r\n//    private void findUserNum() {\r\n//\r\n//    }\r\n\r\n    public void getUserInfo() {\r\n        final FirebaseFirestore db = FirebaseFirestore.getInstance();\r\n        db.collection(\"users\")\r\n                .whereEqualTo(\"email\", userEmail)\r\n                .get()\r\n                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {\r\n                    @Override\r\n                    public void onComplete(@NonNull Task<QuerySnapshot> task) {\r\n                        if (task.isSuccessful()) {\r\n                            for (QueryDocumentSnapshot document : task.getResult()) {\r\n                                fStoreStudentNumber = (String) document.get(\"studentnumber\");\r\n                                textViewUserNumber.setText(fStoreStudentNumber);\r\n                            }\r\n                        } else {\r\n                            Toast.makeText(QrCodeActivity.this, \"에러 발생\", Toast.LENGTH_SHORT).show();\r\n                        }\r\n                    }\r\n                });\r\n    }\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/smnocovid19/QrCodeActivity.java	(revision 9f003b9920123854cb805f1565245af8b409afb5)
++++ app/src/main/java/com/example/smnocovid19/QrCodeActivity.java	(date 1606412564383)
+@@ -9,24 +9,16 @@
+ import android.util.Log;
+ import android.view.View;
+ import android.widget.Button;
+-import android.widget.EditText;
+ import android.widget.TextView;
+ import android.widget.Toast;
+ 
+-import com.google.android.gms.tasks.OnCompleteListener;
+ import com.google.android.gms.tasks.OnFailureListener;
+ import com.google.android.gms.tasks.OnSuccessListener;
+-import com.google.android.gms.tasks.Task;
+-import com.google.firebase.auth.FirebaseAuth;
+-import com.google.firebase.auth.FirebaseUser;
+ import com.google.firebase.database.DataSnapshot;
+ import com.google.firebase.database.DatabaseError;
+ import com.google.firebase.database.DatabaseReference;
+ import com.google.firebase.database.FirebaseDatabase;
+ import com.google.firebase.database.ValueEventListener;
+-import com.google.firebase.firestore.FirebaseFirestore;
+-import com.google.firebase.firestore.QueryDocumentSnapshot;
+-import com.google.firebase.firestore.QuerySnapshot;
+ import com.google.zxing.integration.android.IntentIntegrator;
+ import com.google.zxing.integration.android.IntentResult;
+ 
+@@ -39,18 +31,10 @@
+ import static java.security.AccessController.getContext;
+ 
+ public class QrCodeActivity extends AppCompatActivity {
+-    private FirebaseAuth fAuth;
+-    FirebaseFirestore fStore;
+-    private FirebaseUser currentUser;
+-    private Button btn_check, btn_cancel;
+-    private TextView textViewUserNumber, textViewBuildingFloor, textViewBuildingName;
++    private Button btn_check;
++    private TextView textViewUserNumber, textViewBuildingFloor, textViewBuildingName, textViewUpdateTime;
+     private IntentIntegrator qrScan;
+     private DatabaseReference mDatabase;
+-    String subUserNumber;
+-    String fStoreStudentNumber;
+-    String userEmail;
+-    String fStoreEmail;
+-    Intent intent;
+     int a = 0;
+ 
+     long now = System.currentTimeMillis();
+@@ -63,57 +47,39 @@
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_qrcode);
+ 
+-        textViewUserNumber = (TextView) findViewById(R.id.textViewUserNumber);
+-        textViewBuildingName = (TextView) findViewById(R.id.textViewBuildingName);
+-        textViewBuildingFloor = (TextView) findViewById(R.id.textViewBuildingFloor);
+-//        textViewUpdateTime = findViewById(R.id.textViewUpdateTime);
+-
+-        fAuth = FirebaseAuth.getInstance();
+-        fStore = FirebaseFirestore.getInstance();
+-        currentUser = fAuth.getCurrentUser();
+-        userEmail = currentUser.getEmail();
+-
+         btn_check = findViewById(R.id.check);
+-        btn_cancel = findViewById(R.id.cancel);
+         mDatabase = FirebaseDatabase.getInstance().getReference();
+         readUser();
+-        getUserInfo();
+-
+-        btn_cancel.setOnClickListener(new View.OnClickListener() {
+-            @Override
+-            public void onClick(View v) {
+-                intent = new Intent(QrCodeActivity.this, MainActivity.class);
+-                startActivity(intent);
+-            }
+-        });
+ 
+         btn_check.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+-                String getUserNumber = textViewUserNumber.getText().toString();
++               // String getUserNumber = textViewUserNumber.getText().toString();
+                 String getBuildingFloor = textViewBuildingFloor.getText().toString();
+                 String getBuildingName = textViewBuildingName.getText().toString();
+                 String getUpdateTime = formatDate;
+ 
+                 HashMap result = new HashMap<>();
+-                result.put("학번", getUserNumber);
++               // result.put("학번", getUserNumber);
+                 result.put("층", getBuildingFloor);
+                 result.put("건물", getBuildingName);
+                 result.put("입장시간", getUpdateTime);
+ 
+                 a = a + 1;
+-                writeNewUser(a, getUserNumber, getBuildingFloor, getBuildingName, getUpdateTime);
+-                intent = new Intent(QrCodeActivity.this, MainActivity.class);
+-                startActivity(intent);
++                writeNewUser(a, getBuildingFloor, getBuildingName, getUpdateTime);
++
+             }
+         });
++
++       // textViewUserNumber = (TextView) findViewById(R.id.textViewUserNumber);
++        textViewBuildingName = (TextView) findViewById(R.id.textViewBuildingName);
++        textViewBuildingFloor = (TextView) findViewById(R.id.textViewBuildingFloor);
++//        textViewUpdateTime = findViewById(R.id.textViewUpdateTime);
+ 
+         qrScan = new IntentIntegrator(this);
+         qrScan.setOrientationLocked(false);
+         qrScan.setPrompt("사각형에 QR코드를 맞춰주세요");
+         qrScan.initiateScan();
+-
+-
+     }
+ 
+     @Override
+@@ -123,13 +89,10 @@
+             if (result.getContents() == null) {
+                 Toast.makeText(QrCodeActivity.this, "취소하였습니다", Toast.LENGTH_SHORT).show();
+             } else {
+-                Toast.makeText(QrCodeActivity.this, "인식되었습니다 " , Toast.LENGTH_SHORT).show();
+-
+-//                findUserNum();
++                Toast.makeText(QrCodeActivity.this, "인식되었습니다 " + result.getContents(), Toast.LENGTH_SHORT).show();
+                 try {
+                     JSONObject obj = new JSONObject(result.getContents());
+-
+-//                    textViewUserNumber.setText(obj.getString("studentnumber"));
++                   // textViewUserNumber.setText(obj.getString(""));
+                     textViewBuildingName.setText(obj.getString("buildingName"));
+                     textViewBuildingFloor.setText(obj.getString("buildingFloor"));
+ //                    textViewUpdateTime.setText(obj.getString("updateDate"));
+@@ -143,10 +106,10 @@
+         }
+     }
+ 
+-    private void writeNewUser(int userId, String getUserNumber, String getBuildingFloor, String getBuildingName, String getUpdateTime) {
++    private void writeNewUser(int userId, String getBuildingFloor, String getBuildingName, String getUpdateTime) {
+         User user = new User(getBuildingFloor, getBuildingName, getUpdateTime);
+ 
+-        mDatabase.child("timeline").child(getUserNumber).child(getUpdateTime).setValue(user)
++        mDatabase.child("timeline").child(String.valueOf(userId)).setValue(user)
+                 .addOnSuccessListener(new OnSuccessListener<Void>() {
+                     @Override
+                     public void onSuccess(Void aVoid) {
+@@ -160,7 +123,6 @@
+                     }
+                 });
+     }
+-
+     private void readUser() {
+         mDatabase.child("timeline").child("1").addValueEventListener(new ValueEventListener() {
+             @Override
+@@ -179,28 +141,5 @@
+ 
+     }
+ 
+-//    private void findUserNum() {
+-//
+-//    }
+-
+-    public void getUserInfo() {
+-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+-        db.collection("users")
+-                .whereEqualTo("email", userEmail)
+-                .get()
+-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+-                    @Override
+-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+-                        if (task.isSuccessful()) {
+-                            for (QueryDocumentSnapshot document : task.getResult()) {
+-                                fStoreStudentNumber = (String) document.get("studentnumber");
+-                                textViewUserNumber.setText(fStoreStudentNumber);
+-                            }
+-                        } else {
+-                            Toast.makeText(QrCodeActivity.this, "에러 발생", Toast.LENGTH_SHORT).show();
+-                        }
+-                    }
+-                });
+-    }
+ }
+ 
+Index: app/src/main/java/com/example/smnocovid19/TimeLineActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.smnocovid19;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.annotation.Nullable;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.recyclerview.widget.LinearLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport android.content.Context;\r\nimport android.os.Bundle;\r\nimport android.util.Log;\r\nimport android.widget.ArrayAdapter;\r\nimport android.widget.ListAdapter;\r\nimport android.widget.ListView;\r\nimport android.widget.TextView;\r\n\r\nimport com.google.firebase.database.ChildEventListener;\r\nimport com.google.firebase.database.DataSnapshot;\r\nimport com.google.firebase.database.DatabaseError;\r\nimport com.google.firebase.database.DatabaseReference;\r\nimport com.google.firebase.database.FirebaseDatabase;\r\nimport com.google.firebase.database.ValueEventListener;\r\n\r\nimport java.sql.Time;\r\nimport java.text.SimpleDateFormat;\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\nimport java.util.Date;\r\npublic class TimeLineActivity extends AppCompatActivity {\r\n    List<User> timeLineList = new ArrayList<>();\r\n    RecyclerView mRecyclerView;\r\n    Context context;\r\n\r\n    RecyclerView.LayoutManager layoutManager;\r\n\r\n    TimeLineAdapter adapter;\r\n    private DatabaseReference timeLineDbRef;\r\n\r\n    TextView txtBuilding;\r\n    TextView txtFloor;\r\n    TextView txtTime;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_time_line);\r\n\r\n        txtBuilding = findViewById(R.id.txtBuilding);\r\n        txtFloor = findViewById(R.id.txtFloor);\r\n        txtTime = findViewById(R.id.txtTime);\r\n        //recyclerview 설정\r\n        mRecyclerView = findViewById(R.id.timeline_view);\r\n        layoutManager = new LinearLayoutManager(this);\r\n        mRecyclerView.setLayoutManager(layoutManager);\r\n\r\n        timeLineDbRef = FirebaseDatabase.getInstance().getReference(\"timeline/1\");\r\n        timeLineDbRef.addValueEventListener(new ValueEventListener() {\r\n            @Override\r\n            public void onDataChange(@NonNull DataSnapshot snapshot) {\r\n                User timeLine = snapshot.getValue(User.class);\r\n                timeLineList.clear(); //기존 배열리스트가 존재하지 않게 초기화\r\n                //realtimeDB의 실시간 시간 설정\r\n                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(\"yyyy-MM-dd HH:mm:ss\");\r\n                String strDate = simpleDateFormat.format(new Date());\r\n                timeLine.setUpdateTime(strDate);\r\n                timeLineDbRef.setValue(timeLine);\r\n                //담은 데이터들을 배열리스트에 넣음\r\n                timeLineList.add(timeLine);\r\n\r\n                //어댑터 연결\r\n                adapter = new TimeLineAdapter(TimeLineActivity.this, timeLineList, context);\r\n                mRecyclerView.setAdapter(adapter);\r\n            }\r\n            @Override\r\n            public void onCancelled(@NonNull DatabaseError error) {\r\n\r\n            }\r\n        });\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/smnocovid19/TimeLineActivity.java	(revision 9f003b9920123854cb805f1565245af8b409afb5)
++++ app/src/main/java/com/example/smnocovid19/TimeLineActivity.java	(date 1606412558250)
+@@ -7,6 +7,7 @@
+ import androidx.recyclerview.widget.RecyclerView;
+ 
+ import android.content.Context;
++import android.nfc.Tag;
+ import android.os.Bundle;
+ import android.util.Log;
+ import android.widget.ArrayAdapter;
+@@ -19,15 +20,19 @@
+ import com.google.firebase.database.DatabaseError;
+ import com.google.firebase.database.DatabaseReference;
+ import com.google.firebase.database.FirebaseDatabase;
++import com.google.firebase.database.GenericTypeIndicator;
+ import com.google.firebase.database.ValueEventListener;
+ 
+ import java.sql.Time;
+ import java.text.SimpleDateFormat;
+ import java.util.ArrayList;
++import java.util.HashMap;
+ import java.util.List;
+ import java.util.Date;
++import java.util.Map;
++
+ public class TimeLineActivity extends AppCompatActivity {
+-    List<User> timeLineList = new ArrayList<>();
++    List<User> timeLineList = new ArrayList<User>();
+     RecyclerView mRecyclerView;
+     Context context;
+ 
+@@ -35,6 +40,7 @@
+ 
+     TimeLineAdapter adapter;
+     private DatabaseReference timeLineDbRef;
++    private static final String TAG = "TimeLineActivity";
+ 
+     TextView txtBuilding;
+     TextView txtFloor;
+@@ -44,7 +50,7 @@
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_time_line);
+-
++        setTitle("Time Line");
+         txtBuilding = findViewById(R.id.txtBuilding);
+         txtFloor = findViewById(R.id.txtFloor);
+         txtTime = findViewById(R.id.txtTime);
+@@ -52,29 +58,44 @@
+         mRecyclerView = findViewById(R.id.timeline_view);
+         layoutManager = new LinearLayoutManager(this);
+         mRecyclerView.setLayoutManager(layoutManager);
+-
+-        timeLineDbRef = FirebaseDatabase.getInstance().getReference("timeline/1");
++        //타임라인의 인스턴스 정보를 가져옴
++        timeLineDbRef = FirebaseDatabase.getInstance().getReference("timeline");
+         timeLineDbRef.addValueEventListener(new ValueEventListener() {
+             @Override
+             public void onDataChange(@NonNull DataSnapshot snapshot) {
+-                User timeLine = snapshot.getValue(User.class);
+-                timeLineList.clear(); //기존 배열리스트가 존재하지 않게 초기화
+-                //realtimeDB의 실시간 시간 설정
+-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+-                String strDate = simpleDateFormat.format(new Date());
+-                timeLine.setUpdateTime(strDate);
+-                timeLineDbRef.setValue(timeLine);
+-                //담은 데이터들을 배열리스트에 넣음
+-                timeLineList.add(timeLine);
+-
+-                //어댑터 연결
+-                adapter = new TimeLineAdapter(TimeLineActivity.this, timeLineList, context);
+-                mRecyclerView.setAdapter(adapter);
++
++                for(DataSnapshot postSnapshot : snapshot.getChildren()) {
++                    timeLineList.add(postSnapshot.getValue(User.class));
++                    //User user = postSnapshot.child("timeline").getValue(User.class);
++
++                    //timeLineDbRef.setValue(timeLine);
++                    //timeLineList.add(timeLine);
++                }
++
++
++
++
++                //기존 배열리스트가 존재하지 않게 초기화
++                //timeLineList.clear();
++               /* for(DataSnapshot ds : snapshot.getChildren()) {
++                    User timeLine = ds.child("timeline").getValue(User.class);
++                    timeLineDbRef.setValue(timeLine);
++                    //담은 데이터들을 배열리스트에 넣음
++                    timeLineList.add(timeLine);
++                    adapter = new TimeLineAdapter(TimeLineActivity.this, timeLineList, context);
++                    mRecyclerView.setAdapter(adapter);
++                }
++                //어댑터 연결*/
++
+             }
++
+             @Override
+             public void onCancelled(@NonNull DatabaseError error) {
++                Log.w(TAG, "loadPost:onCancelled", error.toException());
++            }
+ 
+-            }
+-        });
+-    }
+-}
+\ No newline at end of file
++        });
++        adapter = new TimeLineAdapter(TimeLineActivity.this, timeLineList, context);
++        mRecyclerView.setAdapter(adapter);
++    }
++}
+Index: app/src/main/res/layout/activity_time_line.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<LinearLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:orientation=\"vertical\"\r\n    tools:context=\".TimeLineActivity\">\r\n<LinearLayout\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:layout_margin=\"10dp\">\r\n    <androidx.recyclerview.widget.RecyclerView\r\n        android:id=\"@+id/timeline_view\"\r\n        tools:listitem=\"@layout/timeline_item\"\r\n        android:layout_height=\"match_parent\"\r\n        android:layout_width=\"match_parent\"\r\n        app:layoutManager=\"androidx.recyclerview.widget.LinearLayoutManager\"/>\r\n   </LinearLayout>\r\n</LinearLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_time_line.xml	(revision 9f003b9920123854cb805f1565245af8b409afb5)
++++ app/src/main/res/layout/activity_time_line.xml	(date 1606412558257)
+@@ -6,6 +6,15 @@
+     android:layout_height="match_parent"
+     android:orientation="vertical"
+     tools:context=".TimeLineActivity">
++    <Button
++        android:id="@+id/btnRefresh"
++        android:layout_gravity="right"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:text="새로고침"
++        android:textSize="25dp"
++        android:textStyle="bold">
++    </Button>
+ <LinearLayout
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+Index: app/src/main/java/com/example/smnocovid19/User.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.smnocovid19;\r\n\r\npublic class User {\r\n    public String userNumber;\r\n    public String buildingFloor;\r\n    public String buildingName;\r\n    public String updateTime;\r\n\r\n    public User() {\r\n\r\n    }\r\n\r\n    public User(String buildingFloor, String buildingName, String updateTime) {\r\n        this.buildingFloor = buildingFloor;\r\n        this.buildingName = buildingName;\r\n        this.updateTime = updateTime;\r\n    }\r\n\r\n    public String getUserNumber() {\r\n        return userNumber;\r\n    }\r\n\r\n    public void setUserNumber(String userNumber) {\r\n        this.userNumber = userNumber;\r\n    }\r\n\r\n    public String getBuildingFloor() {\r\n        return buildingFloor;\r\n    }\r\n\r\n    public void setBuildingFloor(String buildingFloor) {\r\n        this.buildingFloor = buildingFloor;\r\n    }\r\n\r\n    public String getBuildingName() {\r\n        return buildingName;\r\n    }\r\n\r\n    public void setBuildingName(String buildingName) {\r\n        this.buildingName = buildingName;\r\n    }\r\n\r\n    public String getUpdateTime() {\r\n        return updateTime;\r\n    }\r\n\r\n    public void setUpdateTime(String updateTime) {\r\n        this.updateTime = updateTime;\r\n    }\r\n\r\n    @Override\r\n    public String toString() {\r\n        return \"timeline{\" +\r\n                \" userNumber ='\" + userNumber + '\\'' +\r\n                \" buildingFloor ='\" + buildingFloor + '\\'' +\r\n                \", buildingName ='\" + buildingName + '\\'' +\r\n                \", updateTime ='\" + updateTime + '\\'' +\r\n                '}';\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/smnocovid19/User.java	(revision 9f003b9920123854cb805f1565245af8b409afb5)
++++ app/src/main/java/com/example/smnocovid19/User.java	(date 1606412563892)
+@@ -11,6 +11,7 @@
+     }
+ 
+     public User(String buildingFloor, String buildingName, String updateTime) {
++//        this.userNumber = userNumber;
+         this.buildingFloor = buildingFloor;
+         this.buildingName = buildingName;
+         this.updateTime = updateTime;
+@@ -51,7 +52,7 @@
+     @Override
+     public String toString() {
+         return "timeline{" +
+-                " userNumber ='" + userNumber + '\'' +
++//                "userNumber ='" + userNumber + '\'' +
+                 " buildingFloor ='" + buildingFloor + '\'' +
+                 ", buildingName ='" + buildingName + '\'' +
+                 ", updateTime ='" + updateTime + '\'' +
+diff --git .idea/shelf/Uncommitted_changes_before_Update_at_2020-11-25__2_14__Default_Changelist_.xml .idea/shelf/Uncommitted_changes_before_Update_at_2020-11-25__2_14__Default_Changelist_.xml
+diff --git .idea/shelf/Uncommitted_changes_before_Update_at_2020-11-23__10_53__Default_Changelist_.xml .idea/shelf/Uncommitted_changes_before_Update_at_2020-11-23__10_53__Default_Changelist_.xml
