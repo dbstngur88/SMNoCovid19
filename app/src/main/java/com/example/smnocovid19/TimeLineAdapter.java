@@ -19,11 +19,18 @@ import java.util.List;
 
 public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineViewHolder> {
     TimeLineActivity timeLineActivity;
+    CoronaMapActivity coronaMapActivity;
     Context mContext;
     List<User> timeLineList;
 
     public TimeLineAdapter(TimeLineActivity timeLineActivity,List<User> timeLineList, Context mContext ) {
         this.timeLineActivity = timeLineActivity;
+        this.mContext = mContext;
+        this.timeLineList = timeLineList;
+    }
+
+    public TimeLineAdapter(CoronaMapActivity coronaMapActivity,List<User> timeLineList, Context mContext ) {
+        this.coronaMapActivity = coronaMapActivity;
         this.mContext = mContext;
         this.timeLineList = timeLineList;
     }
