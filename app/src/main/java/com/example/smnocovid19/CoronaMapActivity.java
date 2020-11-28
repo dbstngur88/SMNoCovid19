@@ -37,6 +37,8 @@ public class CoronaMapActivity extends AppCompatActivity {
     FirebaseFirestore fStore;
     FirebaseDatabase database;
     DatabaseReference myRef;
+    private DatabaseReference mDatabase;
+
     private static final String TAG = "CoronaMapActivity";
     TextView txtBuilding;
     TextView txtFloor;
@@ -66,7 +68,6 @@ public class CoronaMapActivity extends AppCompatActivity {
         database=FirebaseDatabase.getInstance();
         myRef=database.getReference();
 
-        getTimeLine();
 
         //recyclerview 설정
         recyclerPlace = findViewById(R.id.timeline_view);
@@ -76,6 +77,8 @@ public class CoronaMapActivity extends AppCompatActivity {
         //어뎁터 선언시 초기화
         placeAdapter = new TimeLineAdapter(CoronaMapActivity.this, timeLineList, context);
         recyclerPlace.setAdapter(placeAdapter);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        getTimeLine();
 
     }
 

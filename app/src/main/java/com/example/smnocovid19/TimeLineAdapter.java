@@ -46,12 +46,21 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineViewHolder> {
         timeLineViewHolder.setOnCLickListener(new TimeLineViewHolder.ClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                //아이템을 클릭할 때 동작
-                String buildingName = timeLineList.get(position).getBuildingName();
-                String buildingFloor = timeLineList.get(position).getBuildingFloor();
-                String dateTime = timeLineList.get(position).getUpdateTime();
-                Toast.makeText(timeLineActivity, buildingName+" "+ buildingFloor
-                        +"\n" + dateTime, Toast.LENGTH_SHORT).show();
+                if (view.getContext()==timeLineActivity){
+                    //timelineActivity에서 아이템을 클릭할 때 동작
+                    String buildingName = timeLineList.get(position).getBuildingName();
+                    String buildingFloor = timeLineList.get(position).getBuildingFloor();
+                    String dateTime = timeLineList.get(position).getUpdateTime();
+                    Toast.makeText(timeLineActivity, buildingName+" "+ buildingFloor
+                            +"\n" + dateTime, Toast.LENGTH_SHORT).show();
+                } else if (view.getContext()==coronaMapActivity){
+                    //timelineActivity에서 아이템을 클릭할 때 동작
+                    String buildingName = timeLineList.get(position).getBuildingName();
+                    String buildingFloor = timeLineList.get(position).getBuildingFloor();
+                    String dateTime = timeLineList.get(position).getUpdateTime();
+                    Toast.makeText(coronaMapActivity,"코로나 맵 액티비티에서 출력", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
         return timeLineViewHolder;
