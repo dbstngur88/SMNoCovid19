@@ -3,6 +3,7 @@ package com.example.smnocovid19;
 import androidx.fragment.app.FragmentActivity;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -22,6 +23,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        // 화면을 portrait(세로) 화면으로 고정하고 싶은 경우
+
         setContentView(R.layout.activity_maps);
         intent=getIntent();
 

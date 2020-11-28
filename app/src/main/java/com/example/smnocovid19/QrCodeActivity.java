@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.renderscript.Sampler;
 import android.util.Log;
@@ -59,6 +60,11 @@ public class QrCodeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        // 화면을 portrait(세로) 화면으로 고정하고 싶은 경우
+
+
         setContentView(R.layout.activity_qrcode);
 
         textViewUserNumber = (TextView) findViewById(R.id.textViewUserNumber);
@@ -193,6 +199,7 @@ public class QrCodeActivity extends AppCompatActivity {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 fStoreStudentNumber = (String) document.get("studentnumber");
                                 textViewUserNumber.setText(fStoreStudentNumber);
+                                System.out.println("**********************************************" + fStoreStudentNumber + "***************************");
                             }
                         } else {
                             Toast.makeText(QrCodeActivity.this, "에러 발생", Toast.LENGTH_SHORT).show();

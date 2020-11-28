@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -53,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         String token = FirebaseInstanceId.getInstance().getToken();
         Log.d("토큰정보:", token);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        // 화면을 portrait(세로) 화면으로 고정하고 싶은 경우
+
         setContentView(R.layout.activity_main);
 
         //액션바 안보이게 지정
