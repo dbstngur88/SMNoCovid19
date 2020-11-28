@@ -90,6 +90,7 @@ public class TimeLineActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(layoutManager);
         timeLineList = new ArrayList<>();
         //어뎁터 선언시 초기화
+
         adapter = new TimeLineAdapter(TimeLineActivity.this, timeLineList, context);
         mRecyclerView.setAdapter(adapter);
         mDatabase = FirebaseDatabase.getInstance().getReference();

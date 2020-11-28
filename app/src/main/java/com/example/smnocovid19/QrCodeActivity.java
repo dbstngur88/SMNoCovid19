@@ -152,7 +152,8 @@ public class QrCodeActivity extends AppCompatActivity {
         User user = new User(getBuildingFloor, getBuildingName, getUpdateTime);
 
         mDatabase.child("timeline_" + getUserNumber).child(getUpdateTime).setValue(user)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                .addOnSuccessListener(
+                        new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Toast.makeText(QrCodeActivity.this, "등록되었습니다", Toast.LENGTH_SHORT).show();
