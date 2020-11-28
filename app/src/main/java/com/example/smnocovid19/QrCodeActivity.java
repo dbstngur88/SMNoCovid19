@@ -48,7 +48,6 @@ public class QrCodeActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     String fStoreStudentNumber;
     String userEmail;
-    String fStoreEmail;
     Intent intent;
     int a = 0;
 
@@ -119,8 +118,7 @@ public class QrCodeActivity extends AppCompatActivity {
         if (result != null) {
             if (result.getContents() == null) {
                 Toast.makeText(QrCodeActivity.this, "취소하였습니다", Toast.LENGTH_SHORT).show();
-                intent = new Intent(QrCodeActivity.this, MainActivity.class);
-                startActivity(intent);
+                finish();
             } else {
                 Toast.makeText(QrCodeActivity.this, "인식되었습니다 " , Toast.LENGTH_SHORT).show();
 
@@ -134,8 +132,7 @@ public class QrCodeActivity extends AppCompatActivity {
                     String getsBuildingName = textViewBuildingName.getText().toString();
                     writeNewUser(a, fStoreStudentNumber, getsBuildingFloor, getsBuildingName, formatDate);
 //                    textViewUpdateTime.setText(obj.getString("updateDate"));
-                    intent = new Intent(QrCodeActivity.this, MainActivity.class);
-                    startActivity(intent);
+                    finish();
                 } catch (JSONException e) {
                     e.printStackTrace();
                     textViewBuildingName.setText(result.getContents());
