@@ -1,0 +1,64 @@
+Index: app/src/main/res/layout/activity_time_line.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<LinearLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:orientation=\"vertical\"\r\n    tools:context=\".TimeLineActivity\">\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:orientation=\"horizontal\"\r\n        >  <TextView\r\n        android:id=\"@+id/txtUserNumber\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:text=\"학번\"\r\n        android:textStyle=\"bold\"\r\n        android:gravity=\"center\"\r\n        android:textSize=\"30dp\">\r\n    </TextView>\r\n\r\n\r\n    </LinearLayout>\r\n\r\n\r\n\r\n\r\n<LinearLayout\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:layout_margin=\"10dp\">\r\n    <androidx.recyclerview.widget.RecyclerView\r\n        android:id=\"@+id/timeline_view\"\r\n        tools:listitem=\"@layout/timeline_item\"\r\n        android:layout_height=\"match_parent\"\r\n        android:layout_width=\"match_parent\"\r\n        app:layoutManager=\"androidx.recyclerview.widget.LinearLayoutManager\"/>\r\n   </LinearLayout>\r\n</LinearLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_time_line.xml	(revision 09fe101de8bc64b1059eaf0123f9cbe1ff898a5b)
++++ app/src/main/res/layout/activity_time_line.xml	(date 1606493770973)
+@@ -5,14 +5,14 @@
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     android:orientation="vertical"
++    android:background="@drawable/round_value_weakmint"
+     tools:context=".TimeLineActivity">
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+-        android:orientation="horizontal"
+         >  <TextView
+         android:id="@+id/txtUserNumber"
+-        android:layout_width="wrap_content"
++        android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:text="학번"
+         android:textStyle="bold"
+Index: app/src/main/res/layout/timeline_item.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.cardview.widget.CardView\r\n    xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    android:layout_height=\"wrap_content\"\r\n    android:orientation=\"horizontal\"\r\n    android:layout_width=\"match_parent\"\r\n    android:padding=\"16dp\">\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\"\r\n        >\r\n    <ImageView\r\n        android:id=\"@+id/image\"\r\n        android:src=\"@drawable/timeline_clock_outline_icon_139135\"\r\n        android:layout_width=\"80dp\"\r\n        android:layout_height=\"80dp\"/>\r\n\r\n    <TextView\r\n        android:id=\"@+id/txtBuilding\"\r\n        android:layout_toRightOf=\"@+id/image\"\r\n        android:layout_marginLeft=\"20dp\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:text=\"건물 명\"\r\n        android:textSize=\"30dp\"\r\n        android:textStyle=\"bold\"/>\r\n\r\n    <TextView\r\n        android:id=\"@+id/txtFloor\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginLeft=\"20dp\"\r\n        android:layout_toRightOf=\"@id/txtBuilding\"\r\n        android:text=\"건물 층\"\r\n        android:textSize=\"20dp\"\r\n        android:textStyle=\"bold\" />\r\n\r\n        <TextView\r\n            android:id=\"@+id/txtTime\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_gravity=\"bottom\"\r\n            android:text=\"시간\"\r\n            android:textSize=\"20dp\" />\r\n    </LinearLayout>\r\n    </androidx.cardview.widget.CardView>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/timeline_item.xml	(revision 09fe101de8bc64b1059eaf0123f9cbe1ff898a5b)
++++ app/src/main/res/layout/timeline_item.xml	(date 1606493529844)
+@@ -8,10 +8,11 @@
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
++        android:layout_margin="5dp"
+         >
+     <ImageView
+         android:id="@+id/image"
+-        android:src="@drawable/timeline_clock_outline_icon_139135"
++        android:src="@drawable/connect"
+         android:layout_width="80dp"
+         android:layout_height="80dp"/>
+ 
+Index: app/src/main/res/values/colors.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<resources>\r\n    <color name=\"colorPrimary\">#6200EE</color>\r\n    <color name=\"colorPrimaryDark\">#3700B3</color>\r\n    <color name=\"colorAccent\">#03DAC5</color>\r\n</resources>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/colors.xml	(revision 09fe101de8bc64b1059eaf0123f9cbe1ff898a5b)
++++ app/src/main/res/values/colors.xml	(date 1606493529854)
+@@ -3,4 +3,5 @@
+     <color name="colorPrimary">#6200EE</color>
+     <color name="colorPrimaryDark">#3700B3</color>
+     <color name="colorAccent">#03DAC5</color>
++    <color name="colorMint">#B4E6B6</color>
+ </resources>
+\ No newline at end of file

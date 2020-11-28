@@ -1,0 +1,196 @@
+Index: app/src/main/java/com/example/smnocovid19/TimeLineActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.smnocovid19;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.annotation.Nullable;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.recyclerview.widget.LinearLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport android.content.Context;\r\nimport android.content.Intent;\r\nimport android.nfc.Tag;\r\nimport android.os.Bundle;\r\nimport android.util.Log;\r\nimport android.view.View;\r\nimport android.widget.ArrayAdapter;\r\nimport android.widget.Button;\r\nimport android.widget.ListAdapter;\r\nimport android.widget.ListView;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport com.google.android.gms.tasks.OnCompleteListener;\r\nimport com.google.android.gms.tasks.Task;\r\nimport com.google.firebase.auth.FirebaseAuth;\r\nimport com.google.firebase.auth.FirebaseUser;\r\nimport com.google.firebase.database.ChildEventListener;\r\nimport com.google.firebase.database.DataSnapshot;\r\nimport com.google.firebase.database.DatabaseError;\r\nimport com.google.firebase.database.DatabaseReference;\r\nimport com.google.firebase.database.FirebaseDatabase;\r\nimport com.google.firebase.database.GenericTypeIndicator;\r\nimport com.google.firebase.database.Query;\r\nimport com.google.firebase.database.ValueEventListener;\r\nimport com.google.firebase.firestore.FirebaseFirestore;\r\nimport com.google.firebase.firestore.QueryDocumentSnapshot;\r\nimport com.google.firebase.firestore.QuerySnapshot;\r\n\r\nimport java.sql.Time;\r\nimport java.text.SimpleDateFormat;\r\nimport java.util.ArrayList;\r\nimport java.util.HashMap;\r\nimport java.util.List;\r\nimport java.util.Date;\r\nimport java.util.Map;\r\n\r\npublic class TimeLineActivity extends AppCompatActivity {\r\n    List<User> timeLineList = new ArrayList<>();\r\n    private FirebaseAuth fAuth;\r\n    FirebaseFirestore fStore;\r\n    private FirebaseUser currentUser;\r\n    RecyclerView mRecyclerView;\r\n    Context context;\r\n    private DatabaseReference mDatabase;\r\n    RecyclerView.LayoutManager layoutManager;\r\n\r\n    TimeLineAdapter adapter;\r\n    private static final String TAG = \"TimeLineActivity\";\r\n    TextView txtBuilding;\r\n    TextView txtFloor;\r\n    TextView txtTime;\r\n    TextView txtUserNumber;\r\n    String userEmail;\r\n    String fStoreStudentNumber;\r\n    String userNumber;\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_time_line);\r\n        setTitle(\"사용자의 동선이동 타임라인\");\r\n\r\n        fAuth = FirebaseAuth.getInstance();\r\n        fStore = FirebaseFirestore.getInstance();\r\n        currentUser = fAuth.getCurrentUser();\r\n        userEmail = currentUser.getEmail();\r\n        txtBuilding = findViewById(R.id.txtBuilding);\r\n        txtFloor = findViewById(R.id.txtFloor);\r\n        txtTime = findViewById(R.id.txtTime);\r\n        txtUserNumber = findViewById(R.id.txtUserNumber);\r\n        //recyclerview 설정\r\n        mRecyclerView = findViewById(R.id.timeline_view);\r\n        layoutManager = new LinearLayoutManager(this);\r\n        mRecyclerView.setLayoutManager(layoutManager);\r\n        timeLineList = new ArrayList<>();\r\n        //어뎁터 선언시 초기화\r\n        adapter = new TimeLineAdapter(TimeLineActivity.this, timeLineList, context);\r\n        mRecyclerView.setAdapter(adapter);\r\n        mDatabase = FirebaseDatabase.getInstance().getReference();\r\n\r\n        getUserNumber();\r\n        //유저 정보 불러오기 메소드 실행\r\n\r\n        //타임라인 불러오기 메소드 실행\r\n\r\n    }\r\n    public void getTimeLine() {\r\n        mDatabase.child(\"timeline_\"+userNumber)\r\n                .addValueEventListener(new ValueEventListener() {\r\n                    @Override\r\n                    public void onDataChange(@NonNull DataSnapshot snapshot) {\r\n                        timeLineList.clear();\r\n                        for(DataSnapshot s : snapshot.getChildren()){\r\n                            User user = s.getValue(User.class);\r\n                            timeLineList.add(user);\r\n                        }\r\n                        //timeline 갱신후 notify\r\n                        adapter.notifyDataSetChanged();\r\n                    }\r\n\r\n                    @Override\r\n                    public void onCancelled(@NonNull DatabaseError error) {\r\n                        Log.w(TAG, error.toString());\r\n                    }\r\n                });\r\n    }\r\n    public void getUserNumber() {\r\n\r\n        final FirebaseFirestore db = FirebaseFirestore.getInstance();\r\n        db.collection(\"users\")\r\n                .whereEqualTo(\"email\", userEmail)\r\n                .get()\r\n                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {\r\n                    @Override\r\n                    public void onComplete(@NonNull Task<QuerySnapshot> task) {\r\n                        if (task.isSuccessful()) {\r\n                            for (QueryDocumentSnapshot document : task.getResult()) {\r\n                                fStoreStudentNumber = (String)document.get(\"studentnumber\");\r\n                                txtUserNumber.setText(fStoreStudentNumber);\r\n                                userNumber = txtUserNumber.getText().toString();\r\n                                getTimeLine();\r\n                            }\r\n                        } else {\r\n                            Toast.makeText(TimeLineActivity.this, \"에러 발생\", Toast.LENGTH_SHORT).show();\r\n                        }\r\n                    }\r\n                });\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/smnocovid19/TimeLineActivity.java	(revision 6894f670c34b8b6cf079aa4f8c439182093894de)
++++ app/src/main/java/com/example/smnocovid19/TimeLineActivity.java	(date 1606499581796)
+@@ -2,6 +2,7 @@
+ 
+ import androidx.annotation.NonNull;
+ import androidx.annotation.Nullable;
++import androidx.appcompat.app.ActionBar;
+ import androidx.appcompat.app.AppCompatActivity;
+ import androidx.recyclerview.widget.LinearLayoutManager;
+ import androidx.recyclerview.widget.RecyclerView;
+@@ -62,12 +63,17 @@
+     String userEmail;
+     String fStoreStudentNumber;
+     String userNumber;
++    String indexNum;
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_time_line);
+         setTitle("사용자의 동선이동 타임라인");
+ 
++        //액션바 안보이게 지정
++        ActionBar actionBar = getSupportActionBar();
++        actionBar.hide();
++
+         fAuth = FirebaseAuth.getInstance();
+         fStore = FirebaseFirestore.getInstance();
+         currentUser = fAuth.getCurrentUser();
+@@ -93,7 +99,7 @@
+ 
+     }
+     public void getTimeLine() {
+-        mDatabase.child("timeline_"+userNumber)
++        mDatabase.child("timeline_"+indexNum)
+                 .addValueEventListener(new ValueEventListener() {
+                     @Override
+                     public void onDataChange(@NonNull DataSnapshot snapshot) {
+@@ -124,8 +130,11 @@
+                         if (task.isSuccessful()) {
+                             for (QueryDocumentSnapshot document : task.getResult()) {
+                                 fStoreStudentNumber = (String)document.get("studentnumber");
+-                                txtUserNumber.setText(fStoreStudentNumber);
++                                txtUserNumber.setText(fStoreStudentNumber+"님의 타임라인");
+                                 userNumber = txtUserNumber.getText().toString();
++                                int idx = userNumber.indexOf("님");
++                                indexNum = userNumber.substring(0,idx);
++                                Log.d(TAG+"", indexNum);
+                                 getTimeLine();
+                             }
+                         } else {
+Index: app/src/main/res/layout/activity_time_line.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<LinearLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:orientation=\"vertical\"\r\n    tools:context=\".TimeLineActivity\">\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:orientation=\"horizontal\"\r\n        >  <TextView\r\n        android:id=\"@+id/txtUserNumber\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:text=\"학번\"\r\n        android:textStyle=\"bold\"\r\n        android:gravity=\"center\"\r\n        android:textSize=\"30dp\">\r\n    </TextView>\r\n\r\n\r\n    </LinearLayout>\r\n\r\n\r\n\r\n\r\n<LinearLayout\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:layout_margin=\"10dp\">\r\n    <androidx.recyclerview.widget.RecyclerView\r\n        android:id=\"@+id/timeline_view\"\r\n        tools:listitem=\"@layout/timeline_item\"\r\n        android:layout_height=\"match_parent\"\r\n        android:layout_width=\"match_parent\"\r\n        app:layoutManager=\"androidx.recyclerview.widget.LinearLayoutManager\"/>\r\n   </LinearLayout>\r\n</LinearLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_time_line.xml	(revision 6894f670c34b8b6cf079aa4f8c439182093894de)
++++ app/src/main/res/layout/activity_time_line.xml	(date 1606499477868)
+@@ -3,37 +3,35 @@
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_width="match_parent"
+-    android:layout_height="match_parent"
++    android:layout_height="wrap_content"
++    android:background="@color/colorWhite"
+     android:orientation="vertical"
+     tools:context=".TimeLineActivity">
+     <LinearLayout
+         android:layout_width="match_parent"
+-        android:layout_height="wrap_content"
+-        android:orientation="horizontal"
+-        >  <TextView
+-        android:id="@+id/txtUserNumber"
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:text="학번"
+-        android:textStyle="bold"
+-        android:gravity="center"
+-        android:textSize="30dp">
++        android:layout_height="wrap_content">
++        <TextView
++            android:background="@color/colorWhite"
++            android:id="@+id/txtUserNumber"
++            android:layout_width="0sp"
++            android:layout_height="60sp"
++            android:layout_weight="1"
++            android:text="학번"
++            android:layout_gravity="center_horizontal"
++            android:textStyle="bold"
++            android:gravity="center"
++            android:textSize="30dp">
+     </TextView>
+-
+-
+     </LinearLayout>
+-
+-
+-
+-
+-<LinearLayout
+-    android:layout_width="match_parent"
+-    android:layout_height="match_parent"
+-    android:layout_margin="10dp">
++    <LinearLayout
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:layout_margin="10dp">
++
+     <androidx.recyclerview.widget.RecyclerView
+         android:id="@+id/timeline_view"
+         tools:listitem="@layout/timeline_item"
+-        android:layout_height="match_parent"
++        android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+    </LinearLayout>
+Index: app/src/main/res/layout/timeline_item.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.cardview.widget.CardView\r\n    xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    android:layout_height=\"wrap_content\"\r\n    android:orientation=\"horizontal\"\r\n    android:layout_width=\"match_parent\"\r\n    android:padding=\"16dp\">\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\"\r\n        >\r\n    <ImageView\r\n        android:id=\"@+id/image\"\r\n        android:src=\"@drawable/timeline_clock_outline_icon_139135\"\r\n        android:layout_width=\"80dp\"\r\n        android:layout_height=\"80dp\"/>\r\n\r\n    <TextView\r\n        android:id=\"@+id/txtBuilding\"\r\n        android:layout_toRightOf=\"@+id/image\"\r\n        android:layout_marginLeft=\"20dp\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:text=\"건물 명\"\r\n        android:textSize=\"30dp\"\r\n        android:textStyle=\"bold\"/>\r\n\r\n    <TextView\r\n        android:id=\"@+id/txtFloor\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginLeft=\"20dp\"\r\n        android:layout_toRightOf=\"@id/txtBuilding\"\r\n        android:text=\"건물 층\"\r\n        android:textSize=\"20dp\"\r\n        android:textStyle=\"bold\" />\r\n\r\n        <TextView\r\n            android:id=\"@+id/txtTime\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_gravity=\"bottom\"\r\n            android:text=\"시간\"\r\n            android:textSize=\"20dp\" />\r\n    </LinearLayout>\r\n    </androidx.cardview.widget.CardView>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/timeline_item.xml	(revision 6894f670c34b8b6cf079aa4f8c439182093894de)
++++ app/src/main/res/layout/timeline_item.xml	(date 1606498478316)
+@@ -4,14 +4,20 @@
+     android:layout_height="wrap_content"
+     android:orientation="horizontal"
+     android:layout_width="match_parent"
++    xmlns:card_view="http://schemas.android.com/apk/res-auto"
++    card_view:cardCornerRadius="5dp"
++    card_view:cardElevation="10dp"
++    card_view:contentPadding="5dp"
+     android:padding="16dp">
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
++        android:layout_margin="5dp"
++        android:background="@drawable/round_value_weakmint"
+         >
+     <ImageView
+         android:id="@+id/image"
+-        android:src="@drawable/timeline_clock_outline_icon_139135"
++        android:src="@drawable/connect"
+         android:layout_width="80dp"
+         android:layout_height="80dp"/>
+ 
+@@ -29,7 +35,7 @@
+         android:id="@+id/txtFloor"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+-        android:layout_marginLeft="20dp"
++        android:layout_marginLeft= "30dp"
+         android:layout_toRightOf="@id/txtBuilding"
+         android:text="건물 층"
+         android:textSize="20dp"
+@@ -37,10 +43,11 @@
+ 
+         <TextView
+             android:id="@+id/txtTime"
+-            android:layout_width="wrap_content"
++            android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_gravity="bottom"
+             android:text="시간"
+-            android:textSize="20dp" />
++            android:textSize="20dp"
++            android:textStyle="bold"/>
+     </LinearLayout>
+     </androidx.cardview.widget.CardView>
+\ No newline at end of file
+Index: app/src/main/res/values/colors.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<resources>\r\n    <color name=\"colorPrimary\">#6200EE</color>\r\n    <color name=\"colorPrimaryDark\">#3700B3</color>\r\n    <color name=\"colorAccent\">#03DAC5</color>\r\n</resources>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/colors.xml	(revision 6894f670c34b8b6cf079aa4f8c439182093894de)
++++ app/src/main/res/values/colors.xml	(date 1606497651168)
+@@ -3,4 +3,6 @@
+     <color name="colorPrimary">#6200EE</color>
+     <color name="colorPrimaryDark">#3700B3</color>
+     <color name="colorAccent">#03DAC5</color>
++    <color name="colorMint">#B4E6B6</color>
++    <color name="colorWhite">#FFFFFF</color>
+ </resources>
+\ No newline at end of file
