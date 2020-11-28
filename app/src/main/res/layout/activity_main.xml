@@ -61,33 +61,39 @@
             <TableRow>
                 <LinearLayout
                     android:id="@+id/qrCodeScan"
+                    android:background="@drawable/itemdraw"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:orientation="vertical"
                     >
                     <ImageView
+                        android:background="@drawable/itemdraw"
                         android:layout_width="240sp"
                         android:layout_height="240sp"
                         android:layout_gravity="center"
                         android:src="@drawable/code_scan"
+                        android:padding="5dp"
                         />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="QR코드 스캔"
+                        android:textStyle="bold"
                         android:layout_gravity="center"
                         android:textSize="30sp"
                         />
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/timeline"
+                    android:background="@drawable/itemdraw"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:orientation="vertical"
                     >
                     <ImageView
+                        android:background="@drawable/itemdraw"
                         android:layout_width="240sp"
                         android:layout_height="240sp"
                         android:layout_gravity="center"
@@ -98,6 +104,7 @@
                         android:layout_height="wrap_content"
                         android:text="동선 기록 확인"
                         android:textSize="30sp"
+                        android:textStyle="bold"
                         android:layout_gravity="center"
                         />
                 </LinearLayout>
@@ -105,12 +112,14 @@
             <TableRow>
                 <LinearLayout
                     android:id="@+id/coronaMap"
+                    android:background="@drawable/itemdraw"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:orientation="vertical"
                     >
                     <ImageView
+                        android:background="@drawable/itemdraw"
                         android:layout_width="240sp"
                         android:layout_height="240sp"
                         android:layout_gravity="center"
@@ -121,17 +130,20 @@
                         android:layout_height="wrap_content"
                         android:text="확진자 방문지"
                         android:textSize="30sp"
+                        android:textStyle="bold"
                         android:layout_gravity="center"
                         />
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/document"
+                    android:background="@drawable/itemdraw"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:orientation="vertical"
                     >
                     <ImageView
+                        android:background="@drawable/itemdraw"
                         android:layout_width="240sp"
                         android:layout_height="240sp"
                         android:layout_gravity="center"
@@ -142,6 +154,7 @@
                         android:layout_height="wrap_content"
                         android:text="코로나 19 문진표"
                         android:textSize="30sp"
+                        android:textStyle="bold"
                         android:layout_gravity="center"
                         />
                 </LinearLayout>
