@@ -123,7 +123,7 @@ public class QrCodeActivity extends AppCompatActivity {
                 startActivity(intent);
             } else {
                 Toast.makeText(QrCodeActivity.this, "인식되었습니다 " , Toast.LENGTH_SHORT).show();
-//                findUserNum();
+
                 try {
                     JSONObject obj = new JSONObject(result.getContents());
 
@@ -140,7 +140,6 @@ public class QrCodeActivity extends AppCompatActivity {
                     e.printStackTrace();
                     textViewBuildingName.setText(result.getContents());
                 }
-
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
