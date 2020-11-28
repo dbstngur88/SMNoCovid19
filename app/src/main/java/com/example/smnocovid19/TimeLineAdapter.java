@@ -2,6 +2,7 @@ package com.example.smnocovid19;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,11 +55,12 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineViewHolder> {
                     Toast.makeText(timeLineActivity, buildingName+" "+ buildingFloor
                             +"\n" + dateTime, Toast.LENGTH_SHORT).show();
                 } else if (view.getContext()==coronaMapActivity){
-                    //timelineActivity에서 아이템을 클릭할 때 동작
-                    String buildingName = timeLineList.get(position).getBuildingName();
-                    String buildingFloor = timeLineList.get(position).getBuildingFloor();
-                    String dateTime = timeLineList.get(position).getUpdateTime();
-                    Toast.makeText(coronaMapActivity,"코로나 맵 액티비티에서 출력", Toast.LENGTH_SHORT).show();
+                    //coronaMapAcitivity에서 아이템을 클릭할 때 동작
+                    Intent intent = new Intent(view.getContext(), MapsActivity.class);
+                    intent.putExtra("buildingName", timeLineList.get(position).getBuildingName());
+                    intent.putExtra("buildingFloor", timeLineList.get(position).getBuildingFloor());
+                    intent.putExtra("dateTime", timeLineList.get(position).getUpdateTime());
+                    view.getContext().startActivity(intent);
                 }
 
             }
