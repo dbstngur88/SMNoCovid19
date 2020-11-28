@@ -84,7 +84,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         LatLng target = new LatLng(x, y);   //좌표 위치 지정
         mMap.addMarker(new MarkerOptions().position(target).title(buildingName + " " + buildingFloor + "  방문 시간 : " + dateTime));
-        mMap.moveCamera(CameraUpdateFactory.zoomTo(16));
+        mMap.moveCamera(CameraUpdateFactory.zoomTo(18));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(target));
     }
 }
