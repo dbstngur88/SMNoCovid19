@@ -15,7 +15,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
     Intent intent;
     double x,y;
-    String title;
+    String buildingName, buildingFloor, dateTime;
+
     private GoogleMap mMap;
 
     @Override
@@ -42,12 +43,48 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        title = intent.getStringExtra("place_name");
-        x=intent.getDoubleExtra("x",0);
-        y=intent.getDoubleExtra("y",0);
-        System.out.println("x : " + x + ", y : " + y + ", title : "+title);
-        LatLng sydney = new LatLng(y, x);
-        mMap.addMarker(new MarkerOptions().position(sydney).title(title));
+        buildingName = intent.getStringExtra("buildingName");       //건물 이름
+        buildingFloor = intent.getStringExtra("buildingFloor");     //건물 층수
+        dateTime = intent.getStringExtra("dateTime");               //방문 시간
+
+        if (buildingName.equals("본관")){
+            x = 36.80028;
+            y = 127.07485;
+        } else if (buildingName.equals("원화관")){
+            x = 36.80016;
+            y = 127.07713;
+        } else if (buildingName.equals("자연관")){
+            x = 36.79874;
+            y = 127.07402;
+        } else if (buildingName.equals("인문관")){
+            x = 36.79879;
+            y = 127.07584;
+        } else if (buildingName.equals("공학관")){
+            x = 36.80014;
+            y = 127.07265;
+        } else if (buildingName.equals("도서관")){
+            x = 36.797593;
+            y = 127.075920;
+        } else if (buildingName.equals("보건관")){
+            x = 36.799114;
+            y = 127.078301;
+        } else if (buildingName.equals("학생회관")){
+            x = 36.79754;
+            y = 127.07734;
+        } else if (buildingName.equals("기숙사신관")){
+            x = 36.79596;
+            y = 127.06973;
+        } else if (buildingName.equals("기숙사구관")){
+            x = 36.79616;
+            y = 127.07075;
+        } else if (buildingName.equals("스포츠과학관")){
+            x = 36.801119;
+            y = 127.070314;
+        }
+
+        LatLng target = new LatLng(x, y);   //좌표 위치 지정
+        mMap.addMarker(new MarkerOptions().position(target).title(buildingName + " " + buildingFloor + "  방문 시간 : " + dateTime));
         mMap.moveCamera(CameraUpdateFactory.zoomTo(16));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));    }
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(target));
+    }
 }
